@@ -217,12 +217,14 @@ def InitUsageConfig():
 		("show_menu", _("Show shutdown menu")),
 		("shutdown", _("Immediate shutdown")),
 		("standby", _("Standby")),
+		("standby_noTVshutdown", _("Standby without TV shutdown")),
 		("restart", _("Reboot")) ] )
 
 	config.usage.on_short_powerpress = ConfigSelection(default = "standby", choices = [
 		("show_menu", _("Show shutdown menu")),
 		("shutdown", _("Immediate shutdown")),
-		("standby", _("Standby")) ] )
+		("standby", _("Standby")),
+		("standby_noTVshutdown", _("Standby without TV shutdown")) ] )
 
 	choicelist = [("0", _("Do nothing"))]
 	for i in range(3600, 21601, 3600):
