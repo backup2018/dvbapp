@@ -14754,4 +14754,5 @@ msgstr "Canviar abans d'Stream"
 msgid "zapped"
 msgstr "Canviat"
 
-
+msgid "Standby without TV shutdown"
+msgstr "En espera sense apagar la TV"
