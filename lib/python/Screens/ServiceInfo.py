@@ -85,37 +85,35 @@ class ServiceInfo(Screen):
 			"blue": self.ShowTransponderInformation
 		}, -1)
 
-		self["key_blue"] = self["blue"] = Label(_("Tuner setting values"))
+		self["infolist"] = ServiceInfoList([])
+		self.setTitle(_("Service info"))
 
+		self.transponder_info = self.info = self.feinfo = None
 		if serviceref and session.nav.getCurrentlyPlayingServiceReference() != serviceref:
 			self.type = TYPE_TRANSPONDER_INFO
 			self.skinName="ServiceInfoSimple"
-			info = eServiceCenter.getInstance().info(serviceref)
-			self.transponder_info = info.getInfoObject(serviceref, iServiceInformation.sTransponderData)
+			self.transponder_info = eServiceCenter.getInstance().info(serviceref).getInfoObject(serviceref, iServiceInformation.sTransponderData)
 			# info is a iStaticServiceInformation, not a iServiceInformation
-			self.info = None
-			self.feinfo = None
 		else:
 			self.type = TYPE_SERVICE_INFO
 			self["key_red"] = self["red"] = Label(_("Exit"))
 			self["key_yellow"] = self["yellow"] = Label(_("Service & PIDs"))
+			self["key_blue"] = self["blue"] = Label(_("Tuner setting values"))
 			service = session.nav.getCurrentService()
 			if service is not None:
+				self.transponder_info = None
 				self.info = service.info()
 				self.feinfo = service.frontendInfo()
-			else:
-				self.info = None
-				self.feinfo = None
+				if not self.feinfo.getAll(True):
+					serviceref = session.nav.getCurrentlyPlayingServiceReference()
+					self.transponder_info = serviceref and eServiceCenter.getInstance().info(serviceref).getInfoObject(serviceref, iServiceInformation.sTransponderData)
 
-		tlist = []
-
-		self["infolist"] = ServiceInfoList(tlist)
 		self.onShown.append(self.ShowServiceInformation)
 
 	def ShowServiceInformation(self):
-		self.setTitle(_("Service info - service & PIDs"))
-		self["key_blue"].text = self["blue"].text = _("Tuner setting values")
 		if self.type == TYPE_SERVICE_INFO:
+			self["Title"].text = _("Service info - service & PIDs")
+			self["key_blue"].text = self["blue"].text = _("Tuner setting values")
 			if self.session.nav.getCurrentlyPlayingServiceOrGroup():
 				name = ServiceReference(self.session.nav.getCurrentlyPlayingServiceReference()).getServiceName()
 				refstr = self.session.nav.getCurrentlyPlayingServiceReference().toString()
@@ -154,84 +152,61 @@ class ServiceInfo(Screen):
 					   (_("ONID"), self.getServiceInfoValue(iServiceInformation.sONID), TYPE_VALUE_HEX_DEC, 4))
 
 			self.fillList(Labels)
-		else:
-			if self.transponder_info:
-				tp_info = ConvertToHumanReadable(self.transponder_info)
-				conv = { "tuner_type" : _("Transponder type"),
-						 "system" : _("System"),
-						 "modulation" : _("Modulation"),
-						 "orbital_position" : _("Orbital position"),
-						 "frequency" : _("Frequency"),
-						 "symbol_rate" : _("Symbol rate"),
-						 "bandwidth" : _("Bandwidth"),
-						 "polarization"	: _("Polarization"),
-						 "inversion" : _("Inversion"),
-						 "pilot" : _("Pilot"),
-						 "rolloff" : _("Roll-off"),
-						 "is_id" : _("Input Stream ID"),
-						 "pls_mode" : _("PLS Mode"),
-						 "pls_code" : _("PLS Code"),
-						 "fec_inner" : _("FEC"),
-						 "code_rate_lp" : _("Coderate LP"),
-						 "code_rate_hp" : _("Coderate HP"),
-						 "constellation" : _("Constellation"),
-						 "transmission_mode" : _("Transmission mode"),
-						 "guard_interval" : _("Guard interval"),
-						 "hierarchy_information" : _("Hierarchy information") }
-				Labels = [(conv[i], tp_info[i], i == "orbital_position" and TYPE_VALUE_ORBIT_DEC or TYPE_VALUE_DEC) for i in tp_info.keys() if i in conv]
-				self.fillList(Labels)
+		elif self.transponder_info:
+			self.fillList(self.getFEData(self.transponder_info))
 
 	def ShowTransponderInformation(self):
-		if self["key_blue"].text == _("Tuner setting values"):
-			self.setTitle(_("Service info - tuner setting values"))
-			self["key_blue"].text = self["blue"].text = _("Tuner live values")
-		else:
-			self.setTitle(_("Service info - tuner live values"))
-			self["key_blue"].text = self["blue"].text = _("Tuner setting values")
 		if self.type == TYPE_SERVICE_INFO:
-			frontendData = self.feinfo and self.feinfo.getAll(self.getTitle() == _("Service info - tuner setting values"))
-			self.fillList(self.getFEData(frontendData))
+			if self.feinfo.getAll(True):
+				if self["key_blue"].text == _("Tuner setting values"):
+					self["Title"].text = _("Service info - tuner setting values")
+					self["key_blue"].text = self["blue"].text = _("Tuner live values")
+				else:
+					self["Title"].text = _("Service info - tuner live values")
+					self["key_blue"].text = self["blue"].text = _("Tuner setting values")		
+				frontendData = self.feinfo and self.feinfo.getAll(self.getTitle() == _("Service info - tuner setting values"))
+				self.fillList(self.getFEData(frontendData))
+			elif self.transponder_info:
+				self["Title"].text = _("Service info - tuner setting values")
+				self["key_blue"].text = self["blue"].text = _("Tuner setting values")		
+				self.fillList(self.getFEData(self.transponder_info))
 
 	def getFEData(self, frontendDataOrg):
 		if frontendDataOrg and len(frontendDataOrg):
 			frontendData = ConvertToHumanReadable(frontendDataOrg)
+			if self.transponder_info:
+				tuner = (_("Type"), frontendData["tuner_type"], TYPE_TEXT)
+			else:
+				tuner = (_("NIM & Type"), chr(ord('A') + frontendData["tuner_number"]) + " - " + frontendData["tuner_type"], TYPE_TEXT)
 			if frontendDataOrg["tuner_type"] == "DVB-S":
-				if frontendData["frequency"] > 11699999 :
-					band = "High"
-				else:
-					band = "Low"
-				return ((_("NIM & Type"), chr(ord('A') + frontendData["tuner_number"]) + " - " + frontendData["tuner_type"], TYPE_TEXT),
-						(_("System & Modulation"), frontendData["system"] + " " + frontendData["modulation"], TYPE_TEXT),
-						(_("Orbital position"), frontendData["orbital_position"], TYPE_VALUE_DEC),
-						(_("Frequency & Polarization"), "%s MHz" % (frontendData["frequency"] / 1000) + " - " + frontendData["polarization"], TYPE_TEXT),
-						(_("Symbol rate & FEC"), "%s KSymb/s" % (frontendData["symbol_rate"] / 1000) + " - " + frontendData["fec_inner"], TYPE_TEXT),
-						(_("Inversion, Pilot & Roll-off"), frontendData["inversion"] + " - " + str(frontendData.get("pilot", None)) + " - " + str(frontendData.get("rolloff", None)), TYPE_TEXT),
-						(_("Input Stream ID"), frontendData.get("is_id", 0), TYPE_VALUE_DEC),
-						(_("PLS Mode"), frontendData.get("pls_mode", None), TYPE_TEXT),
-						(_("PLS Code"), frontendData.get("pls_code", 0), TYPE_VALUE_DEC))
+				return (tuner,
+					(_("System & Modulation"), frontendData["system"] + " " + frontendData["modulation"], TYPE_TEXT),
+					(_("Orbital position"), frontendData["orbital_position"], TYPE_VALUE_DEC),
+					(_("Frequency & Polarization"), "%s MHz" % (frontendData["frequency"] / 1000) + " - " + frontendData["polarization"], TYPE_TEXT),
+					(_("Symbol rate & FEC"), "%s KSymb/s" % (frontendData["symbol_rate"] / 1000) + " - " + frontendData["fec_inner"], TYPE_TEXT),
+					(_("Inversion, Pilot & Roll-off"), frontendData["inversion"] + " - " + str(frontendData.get("pilot", None)) + " - " + str(frontendData.get("rolloff", None)), TYPE_TEXT))
 			elif frontendDataOrg["tuner_type"] == "DVB-C":
-				return ((_("NIM & Type"), chr(ord('A') + frontendData["tuner_number"]) + " - " + frontendData["tuner_type"], TYPE_TEXT),
-						(_("Modulation"), frontendData["modulation"], TYPE_TEXT),
-						(_("Frequency"), frontendData["frequency"], TYPE_VALUE_FREQ_FLOAT),
-						(_("Symbol rate & FEC"), "%s KSymb/s" % (frontendData["symbol_rate"] / 1000) + " - " + frontendData["fec_inner"], TYPE_TEXT),
-						(_("Inversion"), frontendData["inversion"], TYPE_TEXT))
+				return (tuner,
+					(_("Modulation"), frontendData["modulation"], TYPE_TEXT),
+					(_("Frequency"), frontendData["frequency"], TYPE_VALUE_FREQ_FLOAT),
+					(_("Symbol rate & FEC"), "%s KSymb/s" % (frontendData["symbol_rate"] / 1000) + " - " + frontendData["fec_inner"], TYPE_TEXT),
+					(_("Inversion"), frontendData["inversion"], TYPE_TEXT))
 			elif frontendDataOrg["tuner_type"] == "DVB-T":
-				return ((_("NIM & Type"), chr(ord('A') + frontendData["tuner_number"]) + " - " + frontendData["tuner_type"], TYPE_TEXT),
-						(_("Frequency & Channel"), "%.3f MHz" % ((frontendData["frequency"] / 1000) / 1000.0) + " - Ch. " + getChannelNumber(frontendData["frequency"], frontendData["tuner_number"]), TYPE_TEXT),
-						(_("Inversion & Bandwidth"), frontendData["inversion"] + " - " + str(frontendData["bandwidth"]), TYPE_TEXT),
-						(_("Code R. LP-HP & Guard Int."), frontendData["code_rate_lp"] + " - " + frontendData["code_rate_hp"] + " - " + frontendData["guard_interval"], TYPE_TEXT),
-						(_("Constellation & FFT mode"), frontendData["constellation"] + " - " + frontendData["transmission_mode"], TYPE_TEXT),
-						(_("Hierarchy info"), frontendData["hierarchy_information"], TYPE_TEXT))
+				return (tuner,
+					(_("Frequency & Channel"), "%.3f MHz" % ((frontendData["frequency"] / 1000) / 1000.0) + " - Ch. " + getChannelNumber(frontendData["frequency"], frontendData["tuner_number"]), TYPE_TEXT),
+					(_("Inversion & Bandwidth"), frontendData["inversion"] + " - " + str(frontendData["bandwidth"]), TYPE_TEXT),
+					(_("Code R. LP-HP & Guard Int."), frontendData["code_rate_lp"] + " - " + frontendData["code_rate_hp"] + " - " + frontendData["guard_interval"], TYPE_TEXT),
+					(_("Constellation & FFT mode"), frontendData["constellation"] + " - " + frontendData["transmission_mode"], TYPE_TEXT),
+					(_("Hierarchy info"), frontendData["hierarchy_information"], TYPE_TEXT))
 			elif frontendDataOrg["tuner_type"] == "ATSC":
-				return ((_("NIM & Type"), chr(ord('A') + frontendData["tuner_number"]) + " - " + frontendData["tuner_type"], TYPE_TEXT),
-						(_("System & Modulation"), frontendData["system"] + " " + frontendData["modulation"], TYPE_TEXT),
-						(_("Frequency"), frontendData["frequency"] / 1000, TYPE_VALUE_FREQ_FLOAT),
-						(_("Inversion"), frontendData["inversion"], TYPE_TEXT))
+				return (tuner,
+					(_("System & Modulation"), frontendData["system"] + " " + frontendData["modulation"], TYPE_TEXT),
+					(_("Frequency"), frontendData["frequency"] / 1000, TYPE_VALUE_FREQ_FLOAT),
+					(_("Inversion"), frontendData["inversion"], TYPE_TEXT))
 		return []
 
 	def fillList(self, Labels):
 		tlist = []
-
 		for item in Labels:
 			if item[1]:
 				value = item[1]
@@ -239,7 +214,6 @@ class ServiceInfo(Screen):
 					tlist.append(ServiceInfoListEntry(item[0]+":", value, item[2]))
 				else:
 					tlist.append(ServiceInfoListEntry(item[0]+":", value, item[2], item[3]))
-
 		self["infolist"].l.setList(tlist)
 
 	def getServiceInfoValue(self, what):
