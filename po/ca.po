@@ -14755,4 +14755,4 @@ msgid "zapped"
 msgstr "Canviat"
 
 msgid "Standby without TV shutdown"
-msgstr "En espera sense apagar la TV"
+msgstr "En repòs sense apagar la TV"

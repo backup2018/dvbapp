@@ -14915,4 +14915,4 @@ msgid "TrueType font (full-HD)"
 msgstr "Fuente TrueType (FullHD)"
 
 msgid "Standby without TV shutdown"
-msgstr "En espera sin apagar la TV"
+msgstr "En reposo sin apagar la TV"
