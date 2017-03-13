@@ -87,7 +87,7 @@ class ServiceInfo(Screen):
 
 		self["key_blue"] = self["blue"] = Label(_("Tuner setting values"))
 
-		if serviceref:
+		if serviceref and session.nav.getCurrentlyPlayingServiceReference() != serviceref:
 			self.type = TYPE_TRANSPONDER_INFO
 			self.skinName="ServiceInfoSimple"
 			info = eServiceCenter.getInstance().info(serviceref)
