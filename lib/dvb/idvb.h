@@ -218,7 +218,7 @@ struct eServiceReferenceDVB: public eServiceReference
 		return tmp;
 	}
 
-	eServiceReferenceDVB(eDVBNamespace dvbnamespace, eTransportStreamID transport_stream_id, eOriginalNetworkID original_network_id, eServiceID service_id, int service_type)
+	eServiceReferenceDVB(eDVBNamespace dvbnamespace, eTransportStreamID transport_stream_id, eOriginalNetworkID original_network_id, eServiceID service_id, int service_type, int source_id = 0)
 		:eServiceReference(eServiceReference::idDVB, 0)
 	{
 		setTransportStreamID(transport_stream_id);
@@ -226,6 +226,7 @@ struct eServiceReferenceDVB: public eServiceReference
 		setDVBNamespace(dvbnamespace);
 		setServiceID(service_id);
 		setServiceType(service_type);
+		setSourceID(source_id);
 	}
 	
 	void set(const eDVBChannelID &chid)
