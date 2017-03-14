@@ -34,6 +34,7 @@ class AudioSelection(Screen, ConfigListScreen):
 		self["key_yellow"] = Boolean(False)
 		self["key_blue"] = Boolean(True)
 		#add by mpiero
+		self.carselected="•"
 		try:
 			self["key_info"] = Label(_("Audio")+"/"+_("Subtitles"))
 			self["key_infos"] = Label(_("Options"))
@@ -76,6 +77,7 @@ class AudioSelection(Screen, ConfigListScreen):
 		self.onLayoutFinish.append(self.__layoutFinished)
 		#add by mpiero 
 		self.numplugin=None
+		self.carselected="•"
 	def keyGotAscii(self):
 		pass
 	def __layoutFinished(self):
@@ -161,7 +163,7 @@ class AudioSelection(Screen, ConfigListScreen):
 					language = ""
 
 					if selectedAudio == x:
-						selected = "X"
+						selected = self.carselected
 						selectedidx = x
 
 					cnt = 0
@@ -250,7 +252,7 @@ class AudioSelection(Screen, ConfigListScreen):
 			self["key_yellow"].setBoolean(False)
 			self["key_green"].setBoolean(False)
 			self["key_red"].setBoolean(False)
-			selected="X"
+			selected= self.carselected
 			for x in subtitlelist:
 				if self.selectedSubtitle and x[:4] == self.selectedSubtitle[:4]:
 					selected = ""
@@ -266,7 +268,7 @@ class AudioSelection(Screen, ConfigListScreen):
 				selected = ""
 
 				if self.selectedSubtitle and x[:4] == self.selectedSubtitle[:4]:
-					selected = "X"
+					selected = self.carselected
 					selectedidx = idx
 					
 				try:
@@ -499,11 +501,10 @@ class AudioSelection(Screen, ConfigListScreen):
 				self["config"].setCurrentIndex(0)
 				self.focus = FOCUS_CONFIG
 
-
 	def keyNumberGlobal(self, number=1):
 		#add by mpiero
 		try:
-			if number <= len(self["streams"].list):
+			if number>0 and number <= len(self["streams"].list):
 				self["streams"].setIndex(number-1)
 				self.keyOk()
 		except:
