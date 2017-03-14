@@ -1,4 +1,4 @@
-import re
+from re import escape as re_escape
 
 from enigma import eTimer, eEnv
 
@@ -28,7 +28,6 @@ config.plugins.wlan.hiddenessid = NoSave(ConfigYesNo(default = False))
 config.plugins.wlan.encryption = NoSave(ConfigSelection(list, default = "WPA2"))
 config.plugins.wlan.wepkeytype = NoSave(ConfigSelection(weplist, default = "ASCII"))
 config.plugins.wlan.psk = NoSave(ConfigPassword(default = "", fixed_size = False))
-
 
 
 class WlanStatus(Screen):
@@ -144,7 +143,7 @@ class WlanStatus(Screen):
 						if accesspoint == "Not-Associated":
 							encryption = _("Disabled")
 						else:
-							encryption = _("Unsupported")
+							encryption = _("off or wpa2 on")
 					else:
 						encryption = _("Enabled")
 					if self.has_key("enc"):
@@ -382,9 +381,21 @@ def callFunction(iface):
 def configStrings(iface):
 	driver = iNetwork.detectWlanModule(iface)
 	ret = ""
-	if driver == 'madwifi' and config.plugins.wlan.hiddenessid.getValue():
-		ret += "\tpre-up iwconfig " + iface + " essid \"" + re.escape(config.plugins.wlan.essid.getValue()) + "\" || true\n"
+	if driver == "brcm-wl":
+		encryption = config.plugins.wlan.encryption.value
+		if encryption == "WPA/WPA2":
+			encryption = "WPA2"
+		encryption = encryption.lower()
+		if encryption == "unencrypted":
+			encryption = "None"
+		ret += '\tpre-up wl-config.sh -m ' + encryption + ' -k ' + config.plugins.wlan.psk.value + ' -s \"' + config.plugins.wlan.essid.value + '\" || true\n'
+		ret += '\tpost-down wl-down.sh || true\n'
+		return ret
+	if driver == 'madwifi' and config.plugins.wlan.hiddenessid.value:
+		ret += "\tpre-up iwconfig " + iface + " essid \"" + re.escape(config.plugins.wlan.essid.value) + "\" || true\n"
 	ret += "\tpre-up wpa_supplicant -i" + iface + " -c" + getWlanConfigName(iface) + " -B -dd -D" + driver + " || true\n"
+	if config.plugins.wlan.hiddenessid.value == True:
+		ret += "\tpre-up iwconfig " + iface + " essid \"" + re_escape(config.plugins.wlan.essid.value) + "\" || true\n"
 	ret += "\tpre-down wpa_cli -i" + iface + " terminate || true\n"
 	return ret
 
