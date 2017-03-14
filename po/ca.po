@@ -7889,7 +7889,7 @@ msgstr "Premeu OK, deseu-ho i sortiu"
 msgid "Press [OK] to select"
 msgstr "Premeu OK per seleccionar"
 
-msgid "Press yellow to set this interface as default interface."
+msgid "Press yellow to set this interface as the default interface."
 msgstr "Premeu groc per configurar-la com a interfície per defecte."
 
 msgid "Prev"
@@ -9255,7 +9255,7 @@ msgstr "Fixar"
 msgid "Set fps for external subtitles"
 msgstr "Ajust de FPS per subtítols externs"
 
-msgid "Set interface as default Interface"
+msgid "Set interface as the default Interface"
 msgstr "Definir interfície com 'per defecte'"
 
 msgid "Set limits"
@@ -11586,6 +11586,12 @@ msgstr "Ús"
 
 msgid "Use DHCP"
 msgstr "Utilitzar DHCP"
+
+msgid "Use only for Wake on WLan (WoW)"
+msgstr "Utilitzar només per a Wake on WLan (WoW)"
+
+msgid "Use Manual dns-nameserver"
+msgstr "Utilitzar nom servidor dns manual"
 
 msgid "Use EIT EPG information when it is available."
 msgstr "Utilitzar la EPG EIT quan sigui possible"
