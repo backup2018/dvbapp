@@ -7919,7 +7919,7 @@ msgstr "Pulse OK, guarde y salga"
 msgid "Press [OK] to select"
 msgstr "Pulse OK para seleccionar"
 
-msgid "Press yellow to set this interface as default interface."
+msgid "Press yellow to set this interface as the default interface."
 msgstr "Pulse amarillo para configurarlo como interface por defecto."
 
 msgid "Prev"
@@ -9288,7 +9288,7 @@ msgstr "Fijar"
 msgid "Set fps for external subtitles"
 msgstr "Ajuste de FPS para subtítulos externos"
 
-msgid "Set interface as default Interface"
+msgid "Set interface as the default Interface"
 msgstr "Definir interface como 'por defecto'"
 
 msgid "Set limits"
@@ -11635,6 +11635,12 @@ msgstr "Uso"
 
 msgid "Use DHCP"
 msgstr "Utilizar DHCP"
+
+msgid "Use only for Wake on WLan (WoW)"
+msgstr "Usar sólo para Wake on WLan (WoW)"
+
+msgid "Use Manual dns-nameserver"
+msgstr "Utilizar nombre servidor dns manual"
 
 msgid "Use EIT EPG information when it is available."
 msgstr "Utilizar la EPG EIT cuando sea posible"
