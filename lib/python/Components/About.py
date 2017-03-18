@@ -62,7 +62,7 @@ def getChipSetString():
 		return "73625"
 	elif getMachineBuild() in ('dm900'):
 		return "7252S"
-	elif getMachineBuild() in ('hd51'):
+	elif getMachineBuild() in ('hd51','vs1500','h7'):
 		return "7251S"
 	else:
 		try:
@@ -91,7 +91,7 @@ def getPythonVersionString():
 		return _("unknown")
 
 def getCPUString():
-	if getMachineBuild() in ('vuuno4k', 'vuultimo4k', 'vusolo4k', 'hd51', 'hd52', 'sf4008', 'dm900', 'gb7252', 'dags7252'):
+	if getMachineBuild() in ('vuuno4k', 'vuultimo4k','vusolo4k', 'hd51', 'hd52', 'sf4008', 'dm900', 'gb7252', 'dags7252', 'vs1500', 'et1x000', 'xc7439','h7'):
 		return "Broadcom"
 	elif getMachineBuild() in ('wetekplay', 'wetekplay2', 'odroidc2'):
 		return "AMLogic"
@@ -120,7 +120,7 @@ def getCPUSpeedString():
 		return "1,5 GHz"
 	elif getMachineBuild() in ('vuuno4k','vuultimo4k','dm900', 'gb7252', 'dags7252'):
 		return "1,7 GHz"
-	elif getMachineBuild() in ('hd51','hd52','sf4008'):
+	elif getMachineBuild() in ('hd51','hd52','sf4008','vs1500','et1x000','h7'):
 		try:
 			import binascii
 			f = open('/sys/firmware/devicetree/base/cpus/cpu@0/clock-frequency', 'rb')
