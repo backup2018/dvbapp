@@ -835,6 +835,7 @@ class InfoBarMenu:
 		self["MenuActions"] = HelpableActionMap(self, "InfobarMenuActions",
 			{
 				"mainMenu": (self.mainMenu, _("Enter main menu...")),
+				"toggleAspectRatio": (self.toggleAspectRatio, _("Toggle aspect ratio...")),
 			})
 		self.session.infobar = None
 
@@ -851,6 +852,17 @@ class InfoBarMenu:
 
 	def mainMenuClosed(self, *val):
 		self.session.infobar = None
+
+	def toggleAspectRatio(self):
+		ASPECT = [ "auto", "16:9", "4:3" ]
+		ASPECT_MSG = { "auto":"Auto", "16:9":"16:9", "4:3":"4:3" }
+		if config.av.aspect.value in ASPECT:
+			index = ASPECT.index(config.av.aspect.value)
+			config.av.aspect.value = ASPECT[(index+1)%3]
+		else:
+			config.av.aspect.value = "auto"
+		config.av.aspect.save()
+		self.session.open(MessageBox, _("AV aspect is %s." % ASPECT_MSG[config.av.aspect.value]), MessageBox.TYPE_INFO, timeout=5)
 
 class InfoBarSimpleEventView:
 	""" Opens the Eventview for now/next """
@@ -3010,6 +3022,68 @@ class InfoBarTimerButton:
 	def timerSelection(self):
 		from Screens.TimerEdit import TimerEditList
 		self.session.open(TimerEditList)
+
+class InfoBarAspectSelection: 
+	STATE_HIDDEN = 0 
+	STATE_ASPECT = 1 
+	STATE_RESOLUTION = 2
+	def __init__(self): 
+		self["AspectSelectionAction"] = HelpableActionMap(self, "InfobarAspectSelectionActions", 
+			{ 
+				"aspectSelection": (self.ExGreen_toggleGreen, _("Aspect list...")), 
+			}) 
+
+		self.__ExGreen_state = self.STATE_HIDDEN
+
+	def ExGreen_doAspect(self):
+		print "do self.STATE_ASPECT"
+		self.__ExGreen_state = self.STATE_ASPECT
+		self.aspectSelection()
+
+	def ExGreen_doResolution(self):
+		print "do self.STATE_RESOLUTION"
+		self.__ExGreen_state = self.STATE_RESOLUTION
+		self.resolutionSelection()
+		
+	def ExGreen_doHide(self):
+		print "do self.STATE_HIDDEN"
+		self.__ExGreen_state = self.STATE_HIDDEN 
+
+	def ExGreen_toggleGreen(self, arg=""):
+		print self.__ExGreen_state
+		if self.__ExGreen_state == self.STATE_HIDDEN:
+			print "self.STATE_HIDDEN"
+			self.ExGreen_doAspect()
+		elif self.__ExGreen_state == self.STATE_ASPECT:
+			print "self.STATE_ASPECT"
+			self.ExGreen_doResolution()
+		elif self.__ExGreen_state == self.STATE_RESOLUTION:
+			print "self.STATE_RESOLUTION"
+			self.ExGreen_doHide()
+
+	def aspectSelection(self):
+		selection = 0
+		tlist= [(_("Resolution"), "resolution"),("--", ""),(_("4_3_letterbox"), "0"), (_("4_3_panscan"), "1"), (_("16_9"), "2"), (_("16_9_always"), "3"), (_("16_10_letterbox"), "4"), (_("16_10_panscan"), "5"), (_("16_9_letterbox"), "6")]
+		for x in range(len(tlist)):
+			selection = x
+		keys = ["green", "",  "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" ]
+		self.session.openWithCallback(self.aspectSelected, ChoiceBox, title=_("Please select an aspect ratio..."), list = tlist, selection = selection, keys = keys)
+
+	def aspectSelected(self, aspect):
+		if not aspect is None:
+			if isinstance(aspect[1], str):
+				if aspect[1] == "":
+					self.ExGreen_doHide()
+				elif aspect[1] == "resolution":
+					self.ExGreen_toggleGreen()
+				else:
+					from Components.AVSwitch import AVSwitch
+					iAVSwitch = AVSwitch()
+					iAVSwitch.setAspectRatio(int(aspect[1]))
+					self.ExGreen_doHide()
+		else:
+			self.ExGreen_doHide()
+		return
 
 class InfoBarVmodeButton:
 	def __init__(self):

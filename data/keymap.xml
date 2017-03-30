@@ -181,8 +181,10 @@
 	<map context="InfobarMenuActions">
 		<key id="KEY_MENU" mapto="mainMenu" flags="mr" />
 		<key id="KEY_SPACE" mapto="mainMenu" flags="mr" />
+		<key id="KEY_ANGLE" mapto="toggleAspectRatio" flags="b" />
+		<key id="KEY_VMODE" mapto="toggleAspectRatio" flags="b" />
 	</map>
-	
+
 	<map context="MenuActions">
 		<key id="KEY_MENU" mapto="menu" flags="mr" />
 		<key id="KEY_SPACE" mapto="menu" flags="mr" />
@@ -217,12 +219,18 @@
 		<key id="KEY_OPTION" mapto="audioSelection" flags="m" />
 	</map>
 
+	<map context="InfobarAspectSelectionActions">
+		<key id="KEY_GREEN" mapto="aspectSelection" flags="l" />
+		<key id="KEY_MODE" mapto="aspectSelection" flags="l" />
+		<key id="KEY_MODE" mapto="aspectSelection" flags="b" />
+	</map>
+
 	<map context="InfobarSubtitleSelectionActions">
 		<key id="KEY_SUBTITLE" mapto="subtitleSelection" flags="m" />
 	</map>
 
 	<map context="InfobarSubserviceSelectionActions">
-		<key id="KEY_GREEN" mapto="subserviceSelection" flags="b" />
+		<key id="KEY_GREEN" mapto="GreenPressed" flags="b" />
 	</map>
 
 	<map context="InfobarRedButtonActions">
