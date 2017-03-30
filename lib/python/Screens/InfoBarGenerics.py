@@ -37,6 +37,7 @@ from Tools import Notifications, ASCIItranslit
 from Tools.Directories import pathExists, fileExists, getRecordingFilename, moveFiles
 
 from enigma import eTimer, eServiceCenter, eDVBServicePMTHandler, iServiceInformation, iPlayableService, eServiceReference, eEPGCache, eActionMap, getDesktop, eDVBDB
+from boxbranding import getBoxType
 
 from time import time, localtime, strftime
 import os
