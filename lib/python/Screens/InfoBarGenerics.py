@@ -3085,6 +3085,81 @@ class InfoBarAspectSelection:
 			self.ExGreen_doHide()
 		return
 
+class InfoBarResolutionSelection:
+	def __init__(self):
+		return
+
+	def resolutionSelection(self):
+		f = open("/proc/stb/vmpeg/0/xres", "r")
+		xresString = f.read()
+		f.close()
+		f = open("/proc/stb/vmpeg/0/yres", "r")
+		yresString = f.read()
+		f.close()
+		if getBoxType().startswith('azbox'):
+			fpsString = '50000'
+		else:	
+			try:
+				f = open("/proc/stb/vmpeg/0/framerate", "r")
+				fpsString = f.read()
+				f.close()
+			except:
+				print"[InfoBarResolutionSelection] Error open /proc/stb/vmpeg/0/framerate !!"
+				fpsString = '50000'
+		
+		xres = int(xresString, 16)
+		yres = int(yresString, 16)
+		fps = int(fpsString)
+		fpsFloat = float(fps)
+		fpsFloat = fpsFloat/1000
+
+		# do we need a new sorting with this way here?
+		# or should we disable some choices?
+		choices = []
+		if os.path.exists("/proc/stb/video/videomode_choices"):
+			f = open("/proc/stb/video/videomode_choices")
+			values = f.readline().replace("\n", "").replace("pal ", "").replace("ntsc ", "").split(" ", -1)
+			for x in values:
+				entry = x.replace('i50', 'i@50hz').replace('i60', 'i@60hz').replace('p23', 'p@23.976hz').replace('p24', 'p@24hz').replace('p25', 'p@25hz').replace('p29', 'p@29hz').replace('p30', 'p@30hz').replace('p50', 'p@50hz'), x
+				choices.append(entry)
+			f.close()
+
+		selection = 0
+		tlist = []
+		tlist.append((_("Exit"), "exit")) 
+		tlist.append((_("Auto(not available)"), "auto"))
+		tlist.append((_("Video: ") + str(xres) + "x" + str(yres) + "@" + str(fpsFloat) + "hz", ""))
+		tlist.append(("--", ""))
+		if choices != []:
+			for x in choices:
+				tlist.append(x)
+
+		keys = ["green", "yellow", "blue", "", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" ]
+
+		mode = open("/proc/stb/video/videomode").read()[:-1]
+		print mode
+		for x in range(len(tlist)):
+			if tlist[x][1] == mode:
+				selection = x
+
+		self.session.openWithCallback(self.ResolutionSelected, ChoiceBox, title=_("Please select a resolution..."), list = tlist, selection = selection, keys = keys)
+
+	def ResolutionSelected(self, Resolution):
+		if not Resolution is None:
+			if isinstance(Resolution[1], str):
+				if Resolution[1] == "exit" or Resolution[1] == "" or Resolution[1] == "auto":
+					self.ExGreen_toggleGreen()
+				if Resolution[1] != "auto":
+					f = open("/proc/stb/video/videomode", "w")
+					f.write(Resolution[1])
+					f.close()
+					#from enigma import gMainDC
+					#gMainDC.getInstance().setResolution(-1, -1)
+					self.ExGreen_doHide()
+		else:
+			self.ExGreen_doHide()
+		return
+
 class InfoBarVmodeButton:
 	def __init__(self):
 		self["VmodeButtonActions"] = HelpableActionMap(self, "InfobarVmodeButtonActions",
