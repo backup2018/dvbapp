@@ -1040,6 +1040,7 @@ RESULT eDVBResourceManager::allocateDemux(eDVBRegisteredFrontend *fe, ePtr<eDVBA
 		}
 	}
 #endif
+/*
 #if defined(__sh__)
 	int n=0;
 	for (; i != m_demux.end(); ++i, ++n)
@@ -1086,7 +1087,7 @@ RESULT eDVBResourceManager::allocateDemux(eDVBRegisteredFrontend *fe, ePtr<eDVBA
 		}
 	}
 #endif
-
+*/
 	if (unused)
 	{
 		unused->m_demux->getCAAdapterID(a);
