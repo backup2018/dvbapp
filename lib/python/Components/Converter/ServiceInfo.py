@@ -38,6 +38,7 @@ class ServiceInfo(Converter, object):
 	IS_576 = 29
 	IS_480 = 30
 	IS_4K = 31
+	IS_IPSTREAM = 32
 
 	def __init__(self, type):
 		Converter.__init__(self, type)
@@ -73,6 +74,7 @@ class ServiceInfo(Converter, object):
 				"Is576": (self.IS_576, (iPlayableService.evVideoSizeChanged,)),
 				"Is480": (self.IS_480, (iPlayableService.evVideoSizeChanged,)),
 				"Is4K": (self.IS_4K, (iPlayableService.evVideoSizeChanged,)),
+				"IsIPStream": (self.IS_IPSTREAM, (iPlayableService.evUpdatedInfo,)),
 			}[type]
 
 	def getServiceInfoString(self, info, what, convert = lambda x: "%d" % x):
@@ -82,6 +84,14 @@ class ServiceInfo(Converter, object):
 		if v == -2:
 			return info.getInfoString(what)
 		return convert(v)
+
+	def getServiceInfoHexString(self, info, what, convert = lambda x: "%04x" % x):
+		v = info.getInfo(what)
+		if v == -1:
+			return "N/A"
+		if v == -2:
+			return info.getInfoString(what)
+		return convert(v)    
 
 	@cached
 	def getBoolean(self):
@@ -107,12 +117,10 @@ class ServiceInfo(Converter, object):
 			except:
 				pass
 			f.close()
-
 		if not video_height:
 			video_height = int(info.getInfo(iServiceInformation.sVideoHeight))
 		if not video_aspect:
 			video_aspect = info.getInfo(iServiceInformation.sAspect)
-
 
 		if self.type == self.HAS_TELETEXT:
 			tpid = info.getInfo(iServiceInformation.sTXTPID)
@@ -164,7 +172,7 @@ class ServiceInfo(Converter, object):
 		elif self.type == self.IS_SD:
 			return video_height < 720
 		elif self.type == self.IS_HD:
-			return video_height >= 720 and video_height < 2160
+			return video_height >= 720 and video_height < 2151
 		elif self.type == self.IS_1080:
 			return video_height > 1000 and video_height <= 1080
 		elif self.type == self.IS_720:
@@ -174,7 +182,9 @@ class ServiceInfo(Converter, object):
 		elif self.type == self.IS_480:
 			return video_height > 0 and video_height <= 480
 		elif self.type == self.IS_4K:
-			return video_height >= 2160
+			return video_height > 2152 and video_height <= 2160
+		elif self.type == self.IS_IPSTREAM:
+			return service.streamed() is not None
 		return False
 
 	boolean = property(getBoolean)
@@ -200,7 +210,7 @@ class ServiceInfo(Converter, object):
 					video_width = int(self.getServiceInfoString(info, iServiceInformation.sVideoWidth))
 				except:
 					return ""
-			return str(video_width)
+			return "%d" % video_width
 		elif self.type == self.YRES:
 			video_height = None
 			if path.exists("/proc/stb/vmpeg/0/yres"):
@@ -215,7 +225,7 @@ class ServiceInfo(Converter, object):
 					video_height = int(self.getServiceInfoString(info, iServiceInformation.sVideoHeight))
 				except:
 					return ""
-			return str(video_height)
+			return "%d" % video_height
 		elif self.type == self.APID:
 			return self.getServiceInfoString(info, iServiceInformation.sAudioPID)
 		elif self.type == self.VPID:
@@ -231,7 +241,7 @@ class ServiceInfo(Converter, object):
 		elif self.type == self.ONID:
 			return self.getServiceInfoString(info, iServiceInformation.sONID)
 		elif self.type == self.SID:
-			return self.getServiceInfoString(info, iServiceInformation.sSID)
+			return self.getServiceInfoHexString(info, iServiceInformation.sSID)
 		elif self.type == self.FRAMERATE:
 			video_rate = None
 			if path.exists("/proc/stb/vmpeg/0/framerate"):
