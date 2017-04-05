@@ -976,11 +976,6 @@ void eServiceMP3::playPositionTiming()
 }
 #endif
 
-RESULT eServiceMP3::setTarget(int target)
-{
-	return -1;
-}
-
 RESULT eServiceMP3::pause(ePtr<iPauseableService> &ptr)
 {
 	ptr=this;
