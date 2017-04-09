@@ -220,7 +220,7 @@
 	</map>
 
 	<map context="InfobarAspectSelectionActions">
-		<key id="KEY_TV" mapto="aspectSelection" flags="l" />
+		<key id="KEY_GREEN" mapto="aspectSelection" flags="l" />
 		<key id="KEY_MODE" mapto="aspectSelection" flags="l" />
 		<key id="KEY_MODE" mapto="aspectSelection" flags="b" />
 	</map>

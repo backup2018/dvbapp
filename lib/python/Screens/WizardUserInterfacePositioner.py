@@ -1,3 +1,4 @@
+from Screens.Screen import Screen
 from Screens.WizardLanguage import WizardLanguage
 from Screens.Rc import Rc
 from Components.Pixmap import Pixmap
@@ -12,6 +13,7 @@ class UserInterfacePositionerWizard(WizardLanguage, Rc):
 		Rc.__init__(self)
 		self.skinName = "StartWizard"
 		self.session = session
+		Screen.setTitle(self, _("Welcome..."))
 		self.Console = Console()
 		self["wizard"] = Pixmap()
 		self["HelpWindow"] = Pixmap()
@@ -28,7 +30,7 @@ class UserInterfacePositionerWizard(WizardLanguage, Rc):
 		self.Console.ePopen('/usr/bin/showiframe /usr/share/enigma2/hd-testcard.mvi')
 
 	def exitWizardQuestion(self, ret = False):
-		if (ret):
+		if ret:
 			self.markDone()
 			self.close()
 
