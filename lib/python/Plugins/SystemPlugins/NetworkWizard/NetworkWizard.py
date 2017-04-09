@@ -1,15 +1,14 @@
-from Screens.Wizard import wizardManager, WizardSummary
 from Screens.WizardLanguage import WizardLanguage
 from Screens.Rc import Rc
 from Screens.MessageBox import MessageBox
 from Screens.Screen import Screen
-from Components.Pixmap import Pixmap, MovingPixmap, MultiPixmap
+from Components.Pixmap import Pixmap
 from Components.Sources.Boolean import Boolean
 from Components.Network import iNetwork
 from Tools.Directories import resolveFilename, SCOPE_PLUGINS
-from enigma import eTimer
 from boxbranding import getMachineBrand, getMachineName, getBoxType
-import enigma
+from enigma import eTimer
+from os import system
 
 class NetworkWizard(WizardLanguage, Rc):
 	skin = """
@@ -132,7 +131,7 @@ class NetworkWizard(WizardLanguage, Rc):
 				if interface == self.selectedInterface:
 					if self.originalInterfaceState[interface]["up"] is False:
 						if iNetwork.checkforInterface(interface) is True:
-							enigma.eConsoleAppContainer().execute("ifconfig %s down" % interface)
+							system("ifconfig " + interface + " down")
 
 	def listInterfaces(self):
 		self.checkOldInterfaceState()
