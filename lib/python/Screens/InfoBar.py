@@ -9,8 +9,6 @@ from Screens.Screen import Screen
 from Components.Label import Label
 from Screens.MessageBox import MessageBox
 
-from Components.AVSwitch import AVSwitch
-
 profile("LOAD:enigma")
 import enigma
 
@@ -165,8 +163,6 @@ class InfoBar(InfoBarBase, InfoBarShowHide,
 		from Screens.TimerEdit import TimerEditList
 		self.session.open(TimerEditList)
 
-import os
-		
 class MoviePlayer(InfoBarAspectSelection, InfoBarBase, InfoBarShowHide, InfoBarMenu, InfoBarSeek, InfoBarShowMovies, InfoBarInstantRecord,
 		InfoBarAudioSelection, InfoBarResolutionSelection, HelpableScreen, InfoBarNotifications, InfoBarServiceNotifications, InfoBarPVRState,
 		InfoBarCueSheetSupport, InfoBarMoviePlayerSummarySupport, InfoBarSubtitleSupport, Screen, InfoBarTeletextPlugin,
@@ -177,6 +173,7 @@ class MoviePlayer(InfoBarAspectSelection, InfoBarBase, InfoBarShowHide, InfoBarM
 
 	def __init__(self, session, service, slist=None, lastservice=None, infobar=None):
 		Screen.__init__(self, session)
+
 		self["actions"] = HelpableActionMap(self, "MoviePlayerActions",
 			{
 				"InfoButtonPressed": (self.openEventView, _("open Info...")),
@@ -209,12 +206,8 @@ class MoviePlayer(InfoBarAspectSelection, InfoBarBase, InfoBarShowHide, InfoBarM
 		self.servicelist = slist
 		self.infobar = infobar
 		self.lastservice = lastservice or session.nav.getCurrentlyPlayingServiceOrGroup()
-		if os.path.exists("/proc/stb/video/policy2"):
-			f = open("/proc/stb/video/policy2", "w")
-			f.write("letterbox")
-			f.close()
-		self.cur_service = service
 		session.nav.playService(service)
+		self.cur_service = service
 		self.returning = False
 		self.onClose.append(self.__onClose)
 		config.misc.standbyCounter.addNotifier(self.standbyCountChanged, initial_call=False)
