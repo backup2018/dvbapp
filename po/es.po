@@ -3961,7 +3961,7 @@ msgstr "Editar DNS"
 msgid "Edit mode off"
 msgstr "Desactivar edición"
 
-msgid "Edit mode off"
+msgid "Edit mode on"
 msgstr "Activar edición"
 
 msgid "Edit Timer"
