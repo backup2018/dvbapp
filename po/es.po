@@ -3958,6 +3958,12 @@ msgstr "Editar"
 msgid "Edit DNS"
 msgstr "Editar DNS"
 
+msgid "Edit mode off"
+msgstr "Desactivar edición"
+
+msgid "Edit mode off"
+msgstr "Activar edición"
+
 msgid "Edit Timer"
 msgstr "Editar reserva"
 
@@ -5048,6 +5054,9 @@ msgstr "Ayuda"
 
 msgid "Helps setting up your antenna"
 msgstr "Ayuda para posicionar la antena"
+
+msgid "hide"
+msgstr "ocultar"
 
 msgid "Hidden network"
 msgstr "Red oculta"
@@ -6243,6 +6252,12 @@ msgstr "Mover al este"
 
 msgid "Move left"
 msgstr "Mover a la izquierda"
+
+msgid "Move mode off"
+msgstr "Desactivar modo movimiento"
+
+msgid "Move mode on"
+msgstr "Activar modo movimiento"
 
 msgid "Move right"
 msgstr "Mover a la derecha"
@@ -9404,6 +9419,9 @@ msgstr "Nitidez"
 
 msgid "Short filenames"
 msgstr "Nombre de archivo corto"
+
+msgid "show"
+msgstr "mostrar"
 
 msgid "Show /tmp/ecm.info"
 msgstr "Mostrar /tmp/ecm.info"
