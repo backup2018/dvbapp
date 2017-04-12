@@ -5056,7 +5056,7 @@ msgid "Helps setting up your antenna"
 msgstr "Ayuda para posicionar la antena"
 
 msgid "hide"
-msgstr "ocultar"
+msgstr "Ocultar"
 
 msgid "Hidden network"
 msgstr "Red oculta"
@@ -9421,7 +9421,7 @@ msgid "Short filenames"
 msgstr "Nombre de archivo corto"
 
 msgid "show"
-msgstr "mostrar"
+msgstr "Mostrar"
 
 msgid "Show /tmp/ecm.info"
 msgstr "Mostrar /tmp/ecm.info"
