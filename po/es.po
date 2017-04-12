@@ -14961,3 +14961,6 @@ msgstr "LCD"
 
 msgid "NEXT / LATER"
 msgstr "SIGUIENTE / DESPUÉS"
+
+msgid "Recording settings"
+msgstr "Ajustes Grabaciones"
