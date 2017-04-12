@@ -74,10 +74,6 @@ class Navigation:
 			x(rec_service, event)
 
 	def playService(self, ref, checkParentalControl=True, forceRestart=False, adjust=True):
-		if os.path.exists("/proc/stb/video/policy2"):
-			f = open("/proc/stb/video/policy2", "w")
-			f.write("letterbox")
-			f.close()
 		oldref = self.currentlyPlayingServiceOrGroup
 		if ref and oldref and ref == oldref and not forceRestart:
 			print "ignore request to play already running service(1)"
