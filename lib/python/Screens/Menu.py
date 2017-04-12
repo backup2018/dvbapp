@@ -9,30 +9,33 @@ from Components.config import config
 from Components.SystemInfo import SystemInfo
 
 from Tools.BoundFunction import boundFunction
-from Tools.Directories import resolveFilename, SCOPE_SKIN
+from Tools.Directories import resolveFilename, fileExists, SCOPE_SKIN
 
 import xml.etree.cElementTree
 
 from Screens.Setup import Setup, getSetupTitle
 
 # read the menu
-mdom = xml.etree.cElementTree.parse(resolveFilename(SCOPE_SKIN, 'menu.xml'))
+if fileExists('/usr/lib/enigma2/python/Plugins/Extensions/spazeMenu/plugin.pyo'):
+	mdom = xml.etree.cElementTree.parse(resolveFilename(SCOPE_SKIN, 'menuspa.xml'))
+else:
+	mdom = xml.etree.cElementTree.parse(resolveFilename(SCOPE_SKIN, 'menu.xml'))
 
 class MenuUpdater:
 	def __init__(self):
 		self.updatedMenuItems = {}
-	
+
 	def addMenuItem(self, id, pos, text, module, screen, weight):
 		if not self.updatedMenuAvailable(id):
 			self.updatedMenuItems[id] = []
 		self.updatedMenuItems[id].append([text, pos, module, screen, weight])
-	
+
 	def delMenuItem(self, id, pos, text, module, screen, weight):
 		self.updatedMenuItems[id].remove([text, pos, module, screen, weight])
-	
+
 	def updatedMenuAvailable(self, id):
 		return self.updatedMenuItems.has_key(id)
-	
+
 	def getUpdatedMenu(self, id):
 		return self.updatedMenuItems[id]
 
@@ -254,7 +257,7 @@ class Menu(Screen, ProtectedScreen):
 
 class MainMenu(Menu):
 	#add file load functions for the xml-file
-	
+
 	def __init__(self, *x):
 		self.skinName = "Menu"
 		Menu.__init__(self, *x)
