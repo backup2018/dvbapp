@@ -3249,10 +3249,10 @@ msgid "Decrease delay by %i ms (can be set)"
 msgstr "Disminuir retardo %i ms"
 
 msgid "Deep standby"
-msgstr "Reposo profundo"
+msgstr "Reposo Profundo"
 
 msgid "Deep-Standby"
-msgstr "Reposo profundo"
+msgstr "Reposo Profundo"
 
 msgid "Default"
 msgstr "Por defecto"
@@ -7721,7 +7721,7 @@ msgid "Plugin manager help"
 msgstr "Ayuda del gestor de Plugins"
 
 msgid "Plugins"
-msgstr "Plugins"
+msgstr "Complementos"
 
 msgid "Polarisation"
 msgstr "Polarización"
@@ -8181,7 +8181,7 @@ msgid "Really upgrade your receiver and reboot now?"
 msgstr "Seguro que desea actualizar el procesador y reiniciar?"
 
 msgid "Reboot"
-msgstr "Reiniciar sistema"
+msgstr "Reiniciar Sistema"
 
 msgid "Reboot Box"
 msgstr "Reiniciar"
@@ -14940,3 +14940,24 @@ msgstr "Fuente TrueType (FullHD)"
 
 msgid "Standby without TV shutdown"
 msgstr "En reposo sin apagar la TV"
+
+msgid "Basic settings"
+msgstr "Ajustes Básicos"
+
+msgid "Basic Settings"
+msgstr "Ajustes Básicos"
+
+msgid "Usage & GUI"
+msgstr "Uso e interfaz"
+
+msgid "Storage devices"
+msgstr "Dispositivos de almacenamiento"
+
+msgid "Extended GUI"
+msgstr "Ajustes de la interfaz"
+
+msgid "Display"
+msgstr "LCD"
+
+msgid "NEXT / LATER"
+msgstr "SIGUIENTE / DESPUÉS"
