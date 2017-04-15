@@ -54,12 +54,6 @@
 			<item weight="20" level="2" text="Streaming clients info" entryID="streaming_clients_info_screen"><screen module="StreamingClientsInfo"/></item>
 		</menu>
 
-		<menu weight="7" level="0" text="Timers" entryID="timer_menu">
-			<id val="timermenu" />
-			<item weight="0" level="0" text="Timers" entryID="timer_edit"><screen module="TimerEdit" screen="TimerEditList" /></item>
-			<item weight="10" level="0" text="CronTimers" entryID="crontimer_edit"><screen module="CronTimer" screen="CronTimers" /></item>
-		</menu>
-
 		<item weight="10" level="1" text="Plugins" entryID="plugin_selection"><screen module="PluginBrowser" screen="PluginBrowser" /></item>
 		<item weight="15" level="1" text="VCR scart" entryID="scart_switch" configcondition="config.usage.show_vcr_scart" requires="ScartSwitch"><code>self.session.scart.VCRSbChanged(3)</code></item>
 
@@ -78,6 +72,13 @@
 				<item weight="0" level="1" text="Basic settings" entryID="audio_setup"><screen module="VideoMode" screen="AudioSetup" /></item>
 				<item weight="10" level="2" entryID="subtitle_setup"><setup id="subtitlesetup" /></item>
 				<item weight="15" level="1" entryID="autolanguage_setup"><setup id="autolanguagesetup" /></item>
+			</menu>
+
+
+			<menu weight="7" level="0" text="Timers" entryID="timer_menu">
+				<id val="timermenu" />
+				<item weight="0" level="0" text="Timers" entryID="timer_edit"><screen module="TimerEdit" screen="TimerEditList" /></item>
+				<item weight="10" level="0" text="CronTimers" entryID="crontimer_edit"><screen module="CronTimer" screen="CronTimers" /></item>
 			</menu>
 
 			<!-- Menu / Settings / Recordings -->
