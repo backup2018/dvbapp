@@ -8864,7 +8864,7 @@ msgstr ""
 "El script para añadir a crontab está vacío, no se ha añadido el retardo"
 
 msgid "Scrolling Speed"
-msgstr "Veloc. desplazam."
+msgstr "Veloc. desplaz."
 
 msgid "Scrolling delay (software renderer)"
 msgstr "Retardo desplazam. (renderiz. por software)"
