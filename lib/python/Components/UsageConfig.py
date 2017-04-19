@@ -447,6 +447,12 @@ def InitUsageConfig():
 		config.usage.fanspeed = ConfigSlider(default=127, increment=8, limits=(0, 255))
 		config.usage.fanspeed.addNotifier(fanSpeedChanged)
 
+	if SystemInfo["LCDshow_symbols"]:
+		def lcdShowSymbols(configElement):
+			open(SystemInfo["LCDshow_symbols"], "w").write(configElement.value and "1" or "0")
+		config.usage.lcd_show_symbols = ConfigYesNo(default = True)
+		config.usage.lcd_show_symbols.addNotifier(lcdShowSymbols)
+
 	config.epg = ConfigSubsection()
 	config.epg.eit = ConfigYesNo(default = True)
 	config.epg.mhw = ConfigYesNo(default = True)

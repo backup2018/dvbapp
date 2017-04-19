@@ -255,6 +255,7 @@
 		<item level="1" text="Scrolling speed (software renderer)" description="Set the scrolling speed of text on the front display, this is used by software renderer in some skins.">config.lcd.scroll_speed</item>
 		<item level="1" text="Scrolling delay (software renderer)" description="Set the delay time between repeated loops, this is used by software renderer in some skins.">config.lcd.scroll_delay</item>
 		<item level="1" text="Date/Time Format in Standby" description="Set de Date/Time Format in VFD in standby mode (A = Alternate data every 15sg).">config.usage.lcd_dateformat</item>
+		<item level="2" text="Show symbols on display" description="This option allows you show all symbols on display." requires="LCDshow_symbols">config.usage.lcd_show_symbols</item>
 	</setup>
 	<setup key="satconfig" title="Satellite dish setup">
 		<item text="Tuner slot" description="Choose which tuner to configure.">config.sat.tunerslot</item>
