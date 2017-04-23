@@ -14964,3 +14964,15 @@ msgstr "SIGUIENTE / DESPUÉS"
 
 msgid "Recording settings"
 msgstr "Ajustes Grabaciones"
+
+msgid "Sort plug-in browser entries"
+msgstr "Ordenar entradas explorador de Plugins"
+
+msgid "This option allows you to hide and sorting of the plugin browser."
+msgstr "Esta opción permite ocultar y ordenar la lista del explorador de Plugins."
+
+msgid "Tuner setting values"
+msgstr "Valores ajuste sint."
+
+msgid "Service & PIDs"
+msgstr "Servicio & PIDs"
