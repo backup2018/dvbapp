@@ -74,7 +74,6 @@
 				<item weight="15" level="1" entryID="autolanguage_setup"><setup id="autolanguagesetup" /></item>
 			</menu>
 
-
 			<menu weight="7" level="0" text="Timers" entryID="timer_menu">
 				<id val="timermenu" />
 				<item weight="0" level="0" text="Timers" entryID="timer_edit"><screen module="TimerEdit" screen="TimerEditList" /></item>
