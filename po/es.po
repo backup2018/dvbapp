@@ -9515,7 +9515,7 @@ msgstr "Mostrar fondo en el modo radio"
 
 msgid "Show blinking rec symbol on Display during recording"
 msgstr ""
-"Muestra el icono de grabación parpadeante en el display durante la grabación"
+"Muestra icono REC parpadeando en el display durante la grabación"
 
 msgid "Show bouquet selection menu"
 msgstr "Mostrar menú de selección de bouquet"
@@ -14976,3 +14976,9 @@ msgstr "Valores ajuste sint."
 
 msgid "Service & PIDs"
 msgstr "Servicio & PIDs"
+
+msgid "Screenshot of LCD in /tmp"
+msgstr "Captura de LCD en /tmp"
+
+msgid "Enable screenshot of LCD in /tmp"
+msgstr "Habilita captura de LCD en /tmp"
