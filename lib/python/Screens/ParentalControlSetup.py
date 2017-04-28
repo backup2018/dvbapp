@@ -82,7 +82,7 @@ class ParentalControlSetup(Screen, ConfigListScreen, ProtectedScreen):
 				self.list.append(self.reloadLists)
 			self.list.append(getConfigListEntry(_("Protect Screens"), config.ParentalControl.setuppinactive))
 			if config.ParentalControl.setuppinactive.value:
-				if fileExists("/usr/lib/enigma2/python/Plugins/Extensions/spazeMenu/plugin.pyo"):
+				if fileExists("/usr/lib/enigma2/python/Plugins/Extensions/spazeMenu/plugin.pyo") or fileExists("/usr/lib/enigma2/python/Plugins/Extensions/spazeMenu/plugin.so"):
 					self.list.append(getConfigListEntry(_("Protect spzMenu (OpenSPA Main Menu)"), config.ParentalControl.config_sections.spzmenu))
 				else:
 					self.list.append(getConfigListEntry(_("Protect main menu"), config.ParentalControl.config_sections.main_menu))
