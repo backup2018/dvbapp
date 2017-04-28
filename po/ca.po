@@ -10,9 +10,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Poedit-Language: Catalan\n"
-"X-Poedit-Country: CATALONIA\n"
-"X-Generator: Poedit 1.5.4\n"
+"X-Generator: Poedit 2.0.1\n"
+"Language: ca\n"
 
 msgid ""
 "\n"
@@ -14762,3 +14761,169 @@ msgstr "Canviat"
 
 msgid "Standby without TV shutdown"
 msgstr "En repòs sense apagar la TV"
+
+msgid "Date/Time Format in Standby"
+msgstr "Format de Data/Hora en repòs"
+
+msgid ""
+"Set de Date/Time Format in VFD in standby mode (A = Alternate data every "
+"15sg)."
+msgstr ""
+"Configura el format de Data/Hora en repòs al display (A = Alterna les dades "
+"cada 15sg)."
+
+msgid "Teletext font and resolution"
+msgstr "Font i resolució Teletext"
+
+msgid "Configure the display resolution and the font used for teletext."
+msgstr "Configura la resolució de pantalla i la font utilitzada pel teletext."
+
+msgid "Teletext UseTTF (0=fixed font, 1=TrueType)"
+msgstr "Teletext UseTTF (0=Fixa, 1=TrueType)"
+
+msgid ""
+"Configure whether a fixed font or a scalable TrueType font is used for "
+"teletext."
+msgstr ""
+"Configura si s'utilitza una font fixa o una font TrueType escalable per al "
+"teletext."
+
+msgid "Teletext TTFBold (0=normal, 1=bold)"
+msgstr "Teletext TTFBold (0=Normal, 1=Negreta)"
+
+msgid "Configure whether a bold TrueType font is used for teletext."
+msgstr "Configurar si s'utilitza una font TrueType en negreta per al teletext."
+
+msgid "Teletext TTFScreenResX (screen X resolution)"
+msgstr "Teletext TTFScreenResX (Resolució pantalla X)"
+
+msgid ""
+"Configure the screen resolution for teletext (Not all skins support full-HD "
+"teletext)."
+msgstr ""
+"Configurar la resolució de pantalla per al teletext (No tots els skins "
+"admiteixen teletext FullHD)."
+
+msgid "Teletext StartX (left border)"
+msgstr "Teletext StartX (vora esquerra)"
+
+msgid "Configure the start coordinate in x of the teletext display area."
+msgstr ""
+"Configura la coordenada d'inici en x de l'àrea de visualització del teletext."
+
+msgid "Teletext EndX (right border)"
+msgstr "Teletext EndX (vora dreta)"
+
+msgid "Configure the end coordinate in x of the teletext display area."
+msgstr ""
+"Configurar la coordenada final en x de l'àrea de visualització del teletext."
+
+msgid "Teletext StartY (lower border)"
+msgstr "Teletext StartY (Vora inferior)"
+
+msgid "Configure the start coordinate in y of the teletext display area."
+msgstr ""
+"Configurar la coordenada d'inici en y de l'àrea de visualització del "
+"teletext."
+
+msgid "Teletext EndY (upper border)"
+msgstr "Teletext EndY (Vora superior)"
+
+msgid "Configure the end coordinate in y of the teletext display area."
+msgstr ""
+"Configurar la coordenada final en y de l'àrea de visualització del teletext."
+
+msgid "Teletext TTFShiftY (vertical letter position)"
+msgstr "Teletext TTFShiftY (Posició lletra vertical)"
+
+msgid "Adjust the vertical position of the letters used for teletext."
+msgstr ""
+"Ajustar la posició vertical de les lletres utilitzades per al teletext."
+
+msgid "Teletext TTFShiftX (horizontal letter position)"
+msgstr "Teletext TTFShiftX (Posició lletra horitzontal)"
+
+msgid "Adjust the horizontal position of the letters used for teletext."
+msgstr ""
+"Ajustar la posició horitzontal de les lletres utilitzades per al teletext."
+
+msgid "Teletext TTFWidthFactor16 (TrueType letter width)"
+msgstr "Teletext TTFWidthFactor16 (Ample lletra TrueType)"
+
+msgid "Configure the width of the TrueType font letters used for teletext."
+msgstr ""
+"Configurar l'ample de les lletres de la font TrueType utilitzades per al "
+"teletext."
+
+msgid "Teletext TTFHeightFactor16 (TrueType letter height)"
+msgstr "Teletext TTFHeightFactor16 (Altura lletra TrueType)"
+
+msgid "Configure the height of the TrueType font letters used for teletext."
+msgstr ""
+"Configurar l'altura de les lletres de la font TrueType utilitzades per al "
+"teletext."
+
+msgid "Teletext CleanAlgo (resolution reset algorithm)"
+msgstr "Teletext CleanAlgo (Algoritme de restabliment de resolució)"
+
+msgid ""
+"Select the method of restoring screen resolution and framebuffer when "
+"leaving teletext."
+msgstr ""
+"Seleccionar el mètode de restauració de la resolució de pantalla i "
+"framebuffer al sortir del teletext."
+
+msgid "Fixed X11 font (SD)"
+msgstr "Fixar font X11 (SD)"
+
+msgid "TrueType font (SD)"
+msgstr "Font TrueType (SD)"
+
+msgid "TrueType font (HD)"
+msgstr "Font TrueType (HD)"
+
+msgid "TrueType font (full-HD)"
+msgstr "Font TrueType (FullHD)"
+
+msgid "Basic settings"
+msgstr "Ajustos Bàsics"
+
+msgid "Basic Settings"
+msgstr "Ajustos Bàsics"
+
+msgid "Usage & GUI"
+msgstr "Ús i Interfície"
+
+msgid "Storage devices"
+msgstr "Dispositius d'emmagatzematge"
+
+msgid "Extended GUI"
+msgstr "Ajustos de la interfície"
+
+msgid "Display"
+msgstr "LCD"
+
+msgid "NEXT / LATER"
+msgstr "SEGÜENT / DESPRÉS"
+
+msgid "Recording settings"
+msgstr "Ajustos Grabacions"
+
+msgid "Sort plug-in browser entries"
+msgstr "Ordenar entrades explorador de Plugins"
+
+msgid "This option allows you to hide and sorting of the plugin browser."
+msgstr ""
+"Aquesta opció permet ocultar i ordenar la llista de l'explorador de Plugins."
+
+msgid "Tuner setting values"
+msgstr "Valors ajust sint."
+
+msgid "Service & PIDs"
+msgstr "Servei & PIDs"
+
+msgid "Screenshot of LCD in /tmp"
+msgstr "Captura de LCD a /tmp"
+
+msgid "Enable screenshot of LCD in /tmp"
+msgstr "Habilita captura de LCD a /tmp"
