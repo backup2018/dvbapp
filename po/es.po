@@ -9274,7 +9274,7 @@ msgid "Services"
 msgstr "Canales"
 
 msgid "Set Framerate for MiniTV"
-msgstr "Ajustar el framerate para MiniTV"
+msgstr "Framerate MiniTV"
 
 msgid "Set PIN"
 msgstr "Definir PIN"
