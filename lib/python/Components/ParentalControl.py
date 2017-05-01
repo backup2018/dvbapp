@@ -33,8 +33,6 @@ def InitParentalControl():
 	config.ParentalControl.hideBlacklist = ConfigYesNo(default = False)
 	config.ParentalControl.config_sections = ConfigSubsection()
 	config.ParentalControl.config_sections.main_menu = ConfigYesNo(default = False)
-	if fileExists("/usr/lib/enigma2/python/Plugins/Extensions/spazeMenu/plugin.pyo") or fileExists("/usr/lib/enigma2/python/Plugins/Extensions/spazeMenu/plugin.so"):
-		config.ParentalControl.config_sections.spzmenu = ConfigYesNo(default = False)
 	config.ParentalControl.config_sections.configuration = ConfigYesNo(default = False)
 	config.ParentalControl.config_sections.timer_menu = ConfigYesNo(default = False)
 	config.ParentalControl.config_sections.plugin_browser = ConfigYesNo(default = False)

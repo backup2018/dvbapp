@@ -16,10 +16,7 @@ import xml.etree.cElementTree
 from Screens.Setup import Setup, getSetupTitle
 
 # read the menu
-if fileExists('/usr/lib/enigma2/python/Plugins/Extensions/spazeMenu/plugin.pyo') or fileExists('/usr/lib/enigma2/python/Plugins/Extensions/spazeMenu/plugin.so'):
-	mdom = xml.etree.cElementTree.parse(resolveFilename(SCOPE_SKIN, 'menuspa.xml'))
-else:
-	mdom = xml.etree.cElementTree.parse(resolveFilename(SCOPE_SKIN, 'menu.xml'))
+mdom = xml.etree.cElementTree.parse(resolveFilename(SCOPE_SKIN, 'menu.xml'))
 
 class MenuUpdater:
 	def __init__(self):
