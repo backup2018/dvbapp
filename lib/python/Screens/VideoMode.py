@@ -76,7 +76,7 @@ class VideoSetup(Screen, ConfigListScreen):
 			if config.av.autores.value in ('all', 'hd'):
 				self.list.append(getConfigListEntry(_("Force de-interlace"), config.av.autores_deinterlace,_("If enabled the video will always be de-interlaced.")))
 				self.list.append(getConfigListEntry(_("Automatic resolution label"), config.av.autores_label_timeout,_("Allows you to adjust the amount of time the resolution infomation display on screen.")))
-				if config.av.autores.value in 'hd':
+				if config.av.autores.value in ('hd'):
 					self.list.append(getConfigListEntry(_("Show SD as"), config.av.autores_sd,_("This option allows you to choose how to display standard defintion video on your TV.")))
 				self.list.append(getConfigListEntry(_("Show 480/576p 24fps as"), config.av.autores_480p24,_("This option allows you to choose how to display SD progressive 24Hz on your TV. (as not all TV's support these resolutions)")))
 				self.list.append(getConfigListEntry(_("Show 720p 24fps as"), config.av.autores_720p24,_("This option allows you to choose how to display 720p 24Hz on your TV. (as not all TV's support these resolutions)")))
@@ -363,17 +363,14 @@ class AutoVideoMode(Screen):
 	def __init__(self, session):
 		Screen.__init__(self, session)
 		self.current3dmode = config.osd.threeDmode.value
-		if session != None:
-			self.__event_tracker = ServiceEventTracker(screen=self, eventmap=
-				{
-					iPlayableService.evStart: self.__evStart,
-					iPlayableService.evVideoSizeChanged: self.VideoChanged,
-					iPlayableService.evVideoProgressiveChanged: self.VideoChanged,
-					iPlayableService.evVideoFramerateChanged: self.VideoChanged,
-					#iPlayableService.evBuffering: self.BufferInfo, # currently disabled, does this really need? - with some streams will this permanently called (e.g. #SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//62.113.210.250/medienasa-live playpath=ok-wernigerode_high swfUrl=http%3a//www.blitzvideoserver06.de/blitzvideoplayer6.swf live=1 pageUrl=http%3a//iphonetv.in/#stream-id=45:Offener Kanal Wernigerode rtmp)
-					#iPlayableService.evStopped: self.BufferInfoStop # sometimes not called or called before evBuffering -> if bufferfull = False (when evBuffering permanetly called and buffer < 98%) will autoresolution not longer working
-					#iPlayableService.evEnd: self.BufferInfoStop # alternative for 'evStopped'
-				})
+		self.__event_tracker = ServiceEventTracker(screen=self, eventmap=
+			{
+				iPlayableService.evStart: self.__evStart,
+				iPlayableService.evVideoSizeChanged: self.VideoChanged,
+				iPlayableService.evVideoProgressiveChanged: self.VideoChanged,
+				iPlayableService.evVideoFramerateChanged: self.VideoChanged,
+				iPlayableService.evBuffering: self.BufferInfo,
+			})
 
 		self.delay = False
 		self.bufferfull = True
@@ -410,11 +407,6 @@ class AutoVideoMode(Screen):
 			self.VideoChanged()
 		else:
 			self.bufferfull = False
-		#print '+'*50, 'BufferInfo',bufferInfo[0],self.bufferfull
-
-	def BufferInfoStop(self):
-		self.bufferfull = True
-		#print '-'*50, 'BufferInfoStop'
 
 	def VideoChanged(self):
 		if self.session.nav.getCurrentlyPlayingServiceReference() and not self.session.nav.getCurrentlyPlayingServiceReference().toString().startswith('4097:'):
@@ -456,36 +448,36 @@ class AutoVideoMode(Screen):
 		video_pol = None
 		video_rate = None
 		if path.exists("/proc/stb/vmpeg/0/yres"):
+			f = open("/proc/stb/vmpeg/0/yres", "r")
 			try:
-				f = open("/proc/stb/vmpeg/0/yres", "r")
 				video_height = int(f.read(),16)
-				f.close()
 			except:
-				video_height = 0
+				pass
+			f.close()
 		if path.exists("/proc/stb/vmpeg/0/xres"):
+			f = open("/proc/stb/vmpeg/0/xres", "r")
 			try:
-				f = open("/proc/stb/vmpeg/0/xres", "r")
 				video_width = int(f.read(),16)
-				f.close()
 			except:
-				video_width = 0
+				pass
+			f.close()
 		if path.exists("/proc/stb/vmpeg/0/progressive"):
+			f = open("/proc/stb/vmpeg/0/progressive", "r")
 			try:
-				f = open("/proc/stb/vmpeg/0/progressive", "r")
 				video_pol = "p" if int(f.read(),16) else "i"
-				f.close()
 			except:
-				video_pol = "i"
+				pass
+			f.close()
 		if path.exists("/proc/stb/vmpeg/0/framerate"):
 			f = open("/proc/stb/vmpeg/0/framerate", "r")
 			try:
 				video_rate = int(f.read())
 			except:
-				video_rate = 50
+				pass
 			f.close()
 
 		if not video_height or not video_width or not video_pol or not video_rate:
-			service = self.session and self.session.nav.getCurrentService()
+			service = self.session.nav.getCurrentService()
 			if service is not None:
 				info = service.info()
 			else:
