@@ -795,6 +795,9 @@ lib/python/Plugins/SystemPlugins/CommonInterfaceAssignment/Makefile
 lib/python/Plugins/SystemPlugins/CommonInterfaceAssignment/meta/Makefile
 lib/python/Plugins/SystemPlugins/DefaultServicesScanner/Makefile
 lib/python/Plugins/SystemPlugins/DefaultServicesScanner/meta/Makefile
+lib/python/Plugins/SystemPlugins/DeviceManager/Makefile
+lib/python/Plugins/SystemPlugins/DeviceManager/icons/Makefile
+lib/python/Plugins/SystemPlugins/DeviceManager/iconsHD/Makefile
 lib/python/Plugins/SystemPlugins/DiseqcTester/Makefile
 lib/python/Plugins/SystemPlugins/DiseqcTester/meta/Makefile
 lib/python/Plugins/SystemPlugins/Hotplug/Makefile
