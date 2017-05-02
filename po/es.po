@@ -3473,7 +3473,7 @@ msgid "Devicename:"
 msgstr "Nombre de dispositivo:"
 
 msgid "Devices"
-msgstr "Ubicación"
+msgstr "Dispositivos"
 
 msgid "Devide"
 msgstr "Dividir"
