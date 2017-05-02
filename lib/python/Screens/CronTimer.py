@@ -36,7 +36,7 @@ class CronTimers(Screen):
 
 		self['key_red'] = Label(_("Delete"))
 		self['key_green'] = Label(_("Add"))
-		self['key_yellow'] = StaticText(_("Start"))
+		self['key_yellow'] = Label(_("Start"))
 		self['key_blue'] = Label(_("Autostart"))
 		self.list = []
 		self['list'] = List(self.list)
