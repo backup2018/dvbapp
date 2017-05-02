@@ -1,10 +1,8 @@
 import NavigationInstance
-from time import localtime, mktime, gmtime
-from ServiceReference import ServiceReference
+from time import localtime, mktime, gmtime, time
 from enigma import iServiceInformation, eServiceCenter, eServiceReference, getBestPlayableServiceReference
 from timer import TimerEntry
 import RecordTimer
-from time import time, localtime
 
 class TimerSanityCheck:
 	def __init__(self, timerlist, newtimer=None):
@@ -48,7 +46,7 @@ class TimerSanityCheck:
 					getUnsignedDataRef2 = self.newtimer.service_ref.ref.getUnsignedData
 					for x in (1, 2, 3, 4):
 						if getUnsignedDataRef1(x) != getUnsignedDataRef2(x):
-							break;
+							break
 					else:
 						return True
 		return False
@@ -159,8 +157,8 @@ class TimerSanityCheck:
 						event_begin = self.newtimer.begin
 						event_end = self.newtimer.end
 					else:
-						event_begin = self.timerlist[event[1]].begin
-						event_end = self.timerlist[event[1]].end
+						event_begin = self.check_timerlist[event[1]].begin
+						event_end = self.check_timerlist[event[1]].end
 					new_event_begin = event[0] + offset_0 + (cnt * 604800)
 					new_event_end = new_event_begin + (event_end - event_begin)
 					self.nrep_eventlist.extend([(new_event_begin, self.bflag, event[1]),(new_event_end, self.eflag, event[1])])
