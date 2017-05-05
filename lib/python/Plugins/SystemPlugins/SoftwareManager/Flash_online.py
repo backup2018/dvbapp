@@ -377,10 +377,10 @@ class getDevices(Screen):
 		<screen name="getDevices" position="center,center" size="840,600" title="Try device">
 			<ePixmap position="0,540" zPosition="1" size="210,60" pixmap="skin_default/buttons/red_HD.png" transparent="1" alphatest="on" />
 			<ePixmap position="210,540" zPosition="1" size="210,60" pixmap="skin_default/buttons/green_HD.png" transparent="1" alphatest="on" />
-			<widget name="key_red" render="Label" position="0,540" zPosition="2" size="210,60" valign="center" halign="center" font="Regular;21" transparent="1" shadowColor="black" shadowOffset="-1,-1" />
-			<widget name="key_green" render="Label" position="210,540" zPosition="2" size="210,60" valign="center" halign="center" font="Regular;21" transparent="1" shadowColor="black" shadowOffset="-1,-1" />
-			<widget name="deviceList" position="13,24" zPosition="1" size="804,253" font="Regular; 19" scrollbarMode="showOnDemand" transparent="1" itemHeight="40" />
-			<widget name="info-label" position="13,325" zPosition="1" size="804,187" font="Regular;20" halign="left" valign="top" transparent="1" />
+			<widget name="key_red" render="Label" position="0,540" zPosition="2" size="210,60" valign="center" halign="center" font="RegularHD;21" transparent="1" shadowColor="black" shadowOffset="-1,-1" />
+			<widget name="key_green" render="Label" position="210,540" zPosition="2" size="210,60" valign="center" halign="center" font="RegularHD;21" transparent="1" shadowColor="black" shadowOffset="-1,-1" />
+			<widget name="deviceList" position="13,24" zPosition="1" size="804,253" font="RegularHD; 19" scrollbarMode="showOnDemand" transparent="1" itemHeight="40" />
+			<widget name="info-label" position="13,325" zPosition="1" size="804,187" font="RegularHD;20" halign="left" valign="top" transparent="1" />
 			<eLabel name="" position="13,298" size="804,1" backgroundColor="grey" />
 		</screen>"""
 	else:
