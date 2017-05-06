@@ -566,22 +566,28 @@ class AutoVideoMode(Screen):
 				write_mode = new_mode
 			else:
 				if path.exists('/proc/stb/video/videomode_%shz' % new_rate) and config_rate == 'multi':
-					f = open("/proc/stb/video/videomode_%shz" % new_rate, "r")
-					multi_videomode = f.read().replace('\n','')
-					f.close()
-					if multi_videomode and (current_mode != multi_videomode):
-						write_mode = multi_videomode
-					else:
-						write_mode = current_mode
+					try:
+						f = open("/proc/stb/video/videomode_%shz" % new_rate, "r")
+						multi_videomode = f.read().replace('\n','')
+						f.close()
+						if multi_videomode and (current_mode != multi_videomode):
+							write_mode = multi_videomode
+						else:
+							write_mode = current_mode
+					except:
+						pass
 
 			if write_mode and current_mode != write_mode:
 				resolutionlabel["restxt"].setText(_("Video mode: %s") % write_mode)
 				if config.av.autores.value != "disabled" and config.av.autores_label_timeout.value != '0':
 					resolutionlabel.show()
 				print "[VideoMode] setMode - port: %s, mode: %s" % (config_port, write_mode)
-				f = open("/proc/stb/video/videomode", "w")
-				f.write(write_mode)
-				f.close()
+				try:
+					f = open("/proc/stb/video/videomode", "w")
+					f.write(write_mode)
+					f.close()
+				except Exception, e:
+					print("[VideoMode] write_mode exception:" + str(e))
 
 		iAVSwitch.setAspect(config.av.aspect)
 		iAVSwitch.setWss(config.av.wss)

@@ -101,7 +101,7 @@ class RecordPathsSettings(Screen,ConfigListScreen):
 			default = '/'.join(config.misc.epgcache_filename.value.split('/')[:-1])+'/'
 		except:
 			pass
-		tmp = [ "/media/hdd/", "/media/usb/" ]
+		tmp = [ "/media/hdd/", "/media/usb/", "/media/uSDextra/", "/media/net/", "/etc/enigma2/", "/usr/share/enigma2/" ]
 		if default not in tmp:
 			tmp = tmp[:]
 			tmp.append(default)
