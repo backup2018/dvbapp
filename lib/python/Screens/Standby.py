@@ -127,9 +127,6 @@ class Standby(Screen):
 		else:
 			self.avswitch.setInput("AUX")
 
-		if (getBrandOEM() in ('fulan')):
-			open("/proc/stb/hdmi/output", "w").write("off")
-
 		if int(config.usage.hdd_standby_in_standby.value) != -1: # HDD standby timer value (box in standby) / -1 = same as when box is active
 			for hdd in harddiskmanager.HDDList():
 				hdd[1].setIdleTime(int(config.usage.hdd_standby_in_standby.value))
@@ -168,8 +165,6 @@ class Standby(Screen):
 				self.session.nav.playService(self.prev_running_service)
 		self.session.screen["Standby"].boolean = False
 		globalActionMap.setEnabled(True)
-		if (getBrandOEM() in ('fulan')):
-			open("/proc/stb/hdmi/output", "w").write("on")
 
 		for hdd in harddiskmanager.HDDList():
 			hdd[1].setIdleTime(int(config.usage.hdd_standby.value)) # HDD standby timer value (box active)

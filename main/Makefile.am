@@ -51,14 +51,6 @@ enigma2_LDADD = \
 	@AVAHI_LIBS@ \
 	-ltuxtxt -ltuxtxt32bpp -lcrypt -lrt -ldl
 
-if ENABLE_SH
-enigma2_LDADD += -lmmeimage
-endif
-
-if ENABLE_LIBEPLAYER3
-enigma2_LDADD += -leplayer3
-endif
-
 enigma2_LDFLAGS = -Wl,--export-dynamic
 
 if HAVE_GIT_DIR
