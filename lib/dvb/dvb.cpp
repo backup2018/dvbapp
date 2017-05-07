@@ -90,7 +90,7 @@ eDVBResourceManager::eDVBResourceManager()
 		instance = this;
 
 	int num_adapter = 1;
-	while (eDVBAdapterLinux::exist(num_adapter) && access("/usr/bin/spa-usbtuner", F_OK) != 0)
+	while (eDVBAdapterLinux::exist(num_adapter))
 	{
 		if (eDVBAdapterLinux::isusb(num_adapter))
 		{
