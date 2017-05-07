@@ -218,7 +218,13 @@ class AudioSelection(Screen, ConfigListScreen):
 				surround_choicelist = [("none", _("off")), ("hdmi", _("HDMI")), ("spdif", _("SPDIF")), ("dac", _("DAC"))]
 				self.settings.surround_3d = ConfigSelection(choices = surround_choicelist, default = config.av.surround_3d.getValue())
 				self.settings.surround_3d.addNotifier(self.change3DSurround, initial_call = False)
-				conflist.append(getConfigListEntry(_("3D Surround"), self.settings.surround_3d))
+				conflist.append(getConfigListEntry(_("3D Surround"), self.settings.surround_3d, None))
+
+			if SystemInfo["CanAutoVolume"]:
+				choice_list = [("none", _("off")), ("hdmi", _("HDMI")), ("spdif", _("SPDIF")), ("dac", _("DAC"))]
+				self.settings.autovolume = ConfigSelection(choices = choice_list, default = config.av.autovolume.getValue())
+				self.settings.autovolume.addNotifier(self.changeAutoVolume, initial_call = False)
+				conflist.append(getConfigListEntry(_("Auto Volume Level"), self.settings.autovolume, None))
 
 			from Components.PluginComponent import plugins
 			from Plugins.Plugin import PluginDescriptor
@@ -356,6 +362,11 @@ class AudioSelection(Screen, ConfigListScreen):
 		if surround_3d.getValue():
 			config.av.surround_3d.value = surround_3d.getValue()
 		config.av.surround_3d.save()
+
+	def changeAutoVolume(self, autovolume):
+		if autovolume.value:
+			config.av.autovolume.value = autovolume.getValue()
+		config.av.autovolume.save()
 
 	def changeAC3Downmix(self, downmix):
 		if downmix.getValue():
