@@ -344,7 +344,16 @@ def InitLcd():
 			config.usage.lcd_dateformat.addNotifier(setDateFormat)
 		else:
 			config.usage.lcd_dateformat = ConfigNothing()
-		
+
+		def setXcoreVFD(configElement):
+			if fileExists("/sys/module/brcmstb_osmega/parameters/pt6302_cgram"):
+				f = open("/sys/module/brcmstb_osmega/parameters/pt6302_cgram", "w")
+				f.write(configElement.value)
+				f.close()
+
+		config.usage.vfd_xcorevfd = ConfigSelection(default = "0", choices = [("0", _("12 character")), ("1", _("8 character"))])
+		config.usage.vfd_xcorevfd.addNotifier(setXcoreVFD)
+
 		config.usage.lcd_standbypowerled = ConfigSelection(default = "on", choices = [("off", _("Off")), ("on", _("On"))])
 		config.usage.lcd_standbypowerled.addNotifier(setPowerLEDstanbystate)
 

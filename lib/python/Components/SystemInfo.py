@@ -64,3 +64,4 @@ SystemInfo["HaveMultiBoot"] = fileCheck("/boot/STARTUP") or fileCheck("/boot/cmd
 SystemInfo["HaveMultiBootHD"] = fileCheck("/boot/STARTUP") and getMachineBuild() not in ('gb7252')
 SystemInfo["HaveMultiBootXC"] = fileCheck("/boot/cmdline.txt")
 SystemInfo["CanDoTranscodeAndPIP"] = getBoxType() in ('vusolo4k')
+SystemInfo["XcoreVFD"] = getMachineBuild() in ('xc7346')
