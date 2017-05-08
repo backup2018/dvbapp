@@ -14982,3 +14982,15 @@ msgstr "Captura de LCD en /tmp"
 
 msgid "Enable screenshot of LCD in /tmp"
 msgstr "Habilita captura de LCD en /tmp"
+
+msgid "8 character"
+msgstr "8 caracteres"
+ 
+msgid "12 character"
+msgstr "12 caracteres"
+
+msgid "switch 12 to 8 character display mode"
+msgstr "Cambiar el modo de visualización de 12 a 8 caracteres"
+
+msgid "12, show latin-1 characters except for greek and cyrillic, switch to 8 if needed."
+msgstr "12, mostrar caracteres latin-1 a excepción de griego y cirílico, cambiar a 8 si es necesario."
