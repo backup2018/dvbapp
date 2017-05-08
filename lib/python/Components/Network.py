@@ -42,7 +42,7 @@ class Network:
 		return self.remoteRootFS
 
 	def isBlacklisted(self, iface):
-		return iface in ('lo', 'wifi0', 'wmaster0', 'sit0', 'tun0', 'tap0', 'sys0')
+		return iface in ('lo', 'wifi0', 'wmaster0', 'sit0', 'tun0', 'tap0', 'sys0', 'p2p0')
 
 	def getInterfaces(self, callback = None):
 		self.configuredInterfaces = []
@@ -305,7 +305,7 @@ class Network:
 		moduledir = self.getWlanModuleDir(iface)
 		if moduledir:
 			name = os.path.basename(os.path.realpath(moduledir))
-			if name in ('ath_pci','ath5k'):
+			if name in ('ath_pci','ath5k','ar6k_wlan'):
 				name = 'Atheros'
 			elif name in ('rt73','rt73usb','rt3070sta'):
 				name = 'Ralink'

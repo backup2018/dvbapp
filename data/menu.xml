@@ -156,7 +156,8 @@ self.session.openWithCallback(msgClosed, FactoryReset)
 		<menu weight="99" text="Standby / Restart" entryID="standby_restart_list">
 			<id val="shutdown" />
 			<item weight="5" text="Shutdown" requires="!DeepstandbySupport" entryID="deep_standby"><screen module="Standby" screen="TryQuitMainloop">1</screen></item>
-			<item weight="6" text="MultiBoot" requires="HaveMultiBoot" entryID="deep_standby"><screen module="MultiBootStartup" screen="MultiBootStartup" /></item>
+			<item weight="6" text="MultiBoot" requires="HaveMultiBootHD" entryID="deep_standby"><screen module="MultiBootStartup" screen="MultiBootStartup" /></item>
+			<item weight="6" text="MultiBoot" requires="HaveMultiBootXC" entryID="deep_standby"><screen module="MultiBootStartupXC" screen="MultiBootStartup" /></item>
 			<item weight="10" text="WOL Standby" requires="GBWOL" entryID="deep_standby"><screen module="Standby" screen="TryQuitMainloop">45</screen></item>
 			<item weight="15" text="Standby" entryID="standby"><screen module="Standby" screen="Standby"/></item>
 			<item weight="20" text="Sleep Timer" entryID="sleep"><screen module="SleepTimerEdit" screen="SleepTimerEdit" /></item>
