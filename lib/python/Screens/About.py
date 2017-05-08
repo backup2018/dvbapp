@@ -112,6 +112,13 @@ def getAboutText():
 		f.close()
 		if bootname: bootname = "   (%s)" %bootname 
 		AboutText += _("Selected Image:\t\t%s") % "STARTUP_" + image + bootname + "\n"
+	elif path.exists('/boot/cmdline.txt'):
+		f = open('/boot/cmdline.txt', 'r')
+		f.seek(38)
+		image = f.read(1) 
+		f.close()
+		if bootname: bootname = "   (%s)" %bootname 
+		AboutText += _("Selected Image:\t%s") % "STARTUP_" + image + bootname + "\n"
 
 	AboutText += _("Version:\t\t%s") % getImageVersion() + "\n"
 	AboutText += _("Build:\t\t%s") % getImageBuild() + "\n"
