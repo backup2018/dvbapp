@@ -96,30 +96,11 @@ class RecordPathsSettings(Screen,ConfigListScreen):
 			tmp.append(default)
 		print "Picon Path: ", default, tmp
 		self.picon_dirname = ConfigSelection(default = default, choices = tmp)
-		default = "/hdd/"
-		try:
-			default = '/'.join(config.misc.epgcache_filename.value.split('/')[:-1])+'/'
-		except:
-			pass
-		tmp = [ "/media/hdd/", "/media/usb/", "/media/uSDextra/", "/media/net/", "/etc/enigma2/", "/usr/share/enigma2/" ]
-		if default not in tmp:
-			tmp = tmp[:]
-			tmp.append(default)
-		print "EPG Path: ", default, tmp
-		self.epg_dirname = ConfigSelection(default = default, choices = tmp)
-		default = "epg.dat"
-		try:
-			default = config.misc.epgcache_filename.value.split("/")[-1]
-		except:
-			pass
-		print "EPG File name: ", default
-		self.epg_filename = ConfigText(default = default)
 
 		self.default_dirname.addNotifier(self.checkReadWriteDir, initial_call=False, immediate_feedback=False)
 		self.timer_dirname.addNotifier(self.checkReadWriteDir, initial_call=False, immediate_feedback=False)
 		self.instantrec_dirname.addNotifier(self.checkReadWriteDir, initial_call=False, immediate_feedback=False)
 		self.timeshift_dirname.addNotifier(self.checkReadWriteDir, initial_call=False, immediate_feedback=False)
-		self.epg_dirname.addNotifier(self.checkReadWriteDir, initial_call=False, immediate_feedback=False)
 
 		self.list = []
 		if config.usage.setup_level.index >= 2:
@@ -138,10 +119,6 @@ class RecordPathsSettings(Screen,ConfigListScreen):
 		self.list.append(self.picon_entry)
 		self.piconHDD_entry = getConfigListEntry(_("Search picons in /media/hdd"), config.misc.picon_search_hdd)
 		self.list.append(self.piconHDD_entry)
-		self.epgdir_entry = getConfigListEntry(_("EPG location"), self.epg_dirname)
-		self.list.append(self.epgdir_entry)
-		self.epgfile_entry = getConfigListEntry(_("EPG file name"), self.epg_filename)
-		self.list.append(self.epgfile_entry)
 		self["config"].setList(self.list)
 
 	def ok(self):
@@ -191,14 +168,6 @@ class RecordPathsSettings(Screen,ConfigListScreen):
 				_("Picon location"),
 				currDir =preferredPath(self.picon_dirname.value),
 			)
-		elif currentry == self.epgdir_entry:
-			self.entrydirname = self.epg_dirname
-			self.session.openWithCallback(
-				self.dirnameSelected,
-				LocationBox,
-				_("EPG location"),
-				currDir =preferredPath(self.epg_dirname.value),
-			)
 
 	def dirnameSelected(self, res):
 		if res is not None:
@@ -211,15 +180,6 @@ class RecordPathsSettings(Screen,ConfigListScreen):
 					tmp = tmp[:]
 					tmp.append(default)
 				self.picon_dirname.setChoices(tmp, default=default)
-				self.entrydirname.value = res
-
-			if currentry == self.epgdir_entry:
-				tmp = [ "/hdd/", "/usb/" ]
-				default = res
-				if default not in tmp:
-					tmp = tmp[:]
-					tmp.append(default)
-				self.epg_dirname.setChoices(tmp, default=default)
 				self.entrydirname.value = res
 
 			if config.movielist.videodirs.value != self.lastvideodirs:
@@ -257,7 +217,7 @@ class RecordPathsSettings(Screen,ConfigListScreen):
 	def save(self):
 		currentry = self["config"].getCurrent()
 		save = True
-		if currentry != self.epgfile_entry and currentry != self.picon_entry and currentry != self.piconHDD_entry:
+		if currentry != self.picon_entry and currentry != self.piconHDD_entry:
 			save = self.checkReadWriteDir(currentry[1])
 		if save:
 			config.usage.default_path.value = self.default_dirname.value
@@ -265,13 +225,11 @@ class RecordPathsSettings(Screen,ConfigListScreen):
 			config.usage.instantrec_path.value = self.instantrec_dirname.value 
 			config.usage.timeshift_path.value = self.timeshift_dirname.value
 			config.misc.picon_path.value = self.picon_dirname.value
-			config.misc.epgcache_filename.value = self.epg_dirname.value + self.epg_filename.value
 			config.usage.default_path.save()
 			config.misc.picon_path.save()
 			config.usage.timer_path.save()
 			config.usage.instantrec_path.save()
 			config.usage.timeshift_path.save()
-			config.misc.epgcache_filename.save()
 			config.misc.picon_search_hdd.save()
 			from Components.Renderer import Picon
 			Picon.setPiconPath()

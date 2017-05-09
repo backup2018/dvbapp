@@ -1,7 +1,7 @@
 from Components.Harddisk import harddiskmanager
 from config import ConfigSubsection, ConfigYesNo, config, ConfigSelection, ConfigText, ConfigNumber, ConfigSet, ConfigLocations, ConfigSelectionNumber, ConfigInteger, ConfigPassword, ConfigIP, ConfigClock, ConfigSlider, NoSave, ConfigEnableDisable, ConfigSubDict, ConfigNothing, ConfigDictionarySet
 from Tools.Directories import resolveFilename, SCOPE_HDD, defaultRecordingLocation
-from enigma import setTunerTypePriorityOrder, setPreferredTuner, setSpinnerOnOff, setEnableTtCachingOnOff, eEnv, eDVBDB, Misc_Options, eBackgroundFileEraser, eServiceEvent
+from enigma import setTunerTypePriorityOrder, setPreferredTuner, setSpinnerOnOff, setEnableTtCachingOnOff, eEnv, eDVBDB, Misc_Options, eBackgroundFileEraser, eServiceEvent, eEPGCache
 from Components.NimManager import nimmanager
 from Components.Harddisk import harddiskmanager
 from Components.ServiceList import refreshServiceList
@@ -495,6 +495,27 @@ def InitUsageConfig():
 		from enigma import eEPGCache
 		eEPGCache.getInstance().setEpgHistorySeconds(config.epg.histminutes.getValue()*60)
 	config.epg.histminutes.addNotifier(EpgHistorySecondsChanged)
+
+	hddchoises = [('/etc/enigma2/', 'Internal Flash')]
+	for p in harddiskmanager.getMountedPartitions():
+		if os.path.exists(p.mountpoint):
+			d = os.path.normpath(p.mountpoint)
+			if p.mountpoint != '/':
+				hddchoises.append((p.mountpoint, d))
+	config.misc.epgcachepath = ConfigSelection(default = '/etc/enigma2/', choices = hddchoises)
+	config.misc.epgcachefilename = ConfigText(default='epg', fixed_size=False)
+	config.misc.epgcache_filename = ConfigText(default = (config.misc.epgcachepath.value + config.misc.epgcachefilename.value.replace('.dat','') + '.dat'))
+	def EpgCacheChanged(configElement):
+		config.misc.epgcache_filename.setValue(os.path.join(config.misc.epgcachepath.value, config.misc.epgcachefilename.value.replace('.dat','') + '.dat'))
+		config.misc.epgcache_filename.save()
+		eEPGCache.getInstance().setCacheFile(config.misc.epgcache_filename.value)
+		epgcache = eEPGCache.getInstance()
+		epgcache.save()
+		if not config.misc.epgcache_filename.value.startswith("/etc/enigma2/"):
+			if os.path.exists('/etc/enigma2/' + config.misc.epgcachefilename.value.replace('.dat','') + '.dat'):
+				os.remove('/etc/enigma2/' + config.misc.epgcachefilename.value.replace('.dat','') + '.dat')
+	config.misc.epgcachepath.addNotifier(EpgCacheChanged, immediate_feedback = False)
+	config.misc.epgcachefilename.addNotifier(EpgCacheChanged, immediate_feedback = False)
 
 	def setHDDStandby(configElement):
 		for hdd in harddiskmanager.HDDList():
