@@ -117,7 +117,9 @@ def InitUsageConfig():
 		("default", _("Default")),
 		("user", _("user defined")),])
 	config.usage.plugin_sort_weight = ConfigDictionarySet()
-	
+
+	config.usage.sort_pluginlist = ConfigYesNo(default = True)
+
 	choicelist = []
 	for i in (10, 30):
 		choicelist.append((str(i), ngettext("%d second", "%d seconds", i) % i))
@@ -774,6 +776,10 @@ def InitUsageConfig():
 	config.streaming.stream_eit = ConfigYesNo(default = True)
 	config.streaming.stream_ait = ConfigYesNo(default = True)
 	config.streaming.authentication = ConfigYesNo(default = False)
+
+	config.pluginbrowser = ConfigSubsection()
+	config.pluginbrowser.po = ConfigYesNo(default = False)
+	config.pluginbrowser.src = ConfigYesNo(default = False)
 
 	config.mediaplayer = ConfigSubsection()
 	config.mediaplayer.useAlternateUserAgent = ConfigYesNo(default=False)
