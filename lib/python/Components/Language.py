@@ -5,6 +5,8 @@ import os
 
 from Tools.Directories import SCOPE_LANGUAGE, resolveFilename
 
+Lpackagename = "enigma2-locale-"
+
 class Language:
 	def __init__(self):
 		gettext.install('enigma2', resolveFilename(SCOPE_LANGUAGE, ""), unicode=0, codeset="utf-8")
@@ -17,6 +19,7 @@ class Language:
 
 	def InitLang(self):
 		self.langlist = []
+		self.langlistselection = []
 		self.ll = os.listdir(resolveFilename(SCOPE_LANGUAGE, ""))
 		# FIXME make list dynamically
 		# name, iso-639 language, iso-3166 country. Please don't mix language&country!
@@ -73,6 +76,7 @@ class Language:
 
 		except:
 			print "Language " + str(name) + " not found"
+		self.langlistselection.append((str(lang + "_" + country), name))
 
 	def activateLanguage(self, index):
 		try:
@@ -103,6 +107,9 @@ class Language:
 
 	def getLanguageList(self):
 		return [ (x, self.lang[x]) for x in self.langlist ]
+
+	def getLanguageListSelection(self):
+		return self.langlistselection
 
 	def getActiveLanguage(self):
 		return self.activeLanguage
@@ -145,7 +152,7 @@ class Language:
 				return
 			elif delLang == "en_GB" or delLang == "pt_BR":
 				delLang = delLang.lower()
-				delLang = delLang.replace('_','-')				
+				delLang = delLang.replace('_','-')
 				os.system("opkg remove enigma2-locale-" + delLang)
 			else:
 				os.system("opkg remove enigma2-locale-" + delLang[:2])
@@ -157,14 +164,14 @@ class Language:
 					if x != lang:
 						x = x.lower()
 						x = x.replace('_','-')
-						os.system("opkg remove --force-depends enigma2-locale-" + x)
+						os.system("opkg remove " + Lpackagename + x)
 				else:
 					if x != lang[:2] and x != "en":
-						os.system("opkg remove --force-depends enigma2-locale-" + x)
+						os.system("opkg remove " + Lpackagename + x)
 					elif x == "pt":
 						if x != lang:
-							os.system("opkg remove --force-depends enigma2-locale-" + x)
-			
+							os.system("opkg remove " + Lpackagename + x)
+
 			os.system("touch /etc/enigma2/.removelang")
 
 		self.InitLang()
