@@ -2177,7 +2177,7 @@ class InfoBarExtensions:
 		return _("Softcam-Panel")
 
 	def getSoftcamPanel(self):
-		if config.plugins.showinfopanelextensions.value:
+		if config.plugins.showspateamextensions.value:
 			return [((boundFunction(self.getSoftcamPanelname), boundFunction(self.openSoftcamPanel), lambda: True), None)]
 		else:
 			return []
