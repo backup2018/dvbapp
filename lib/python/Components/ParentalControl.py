@@ -33,6 +33,7 @@ def InitParentalControl():
 	config.ParentalControl.hideBlacklist = ConfigYesNo(default = False)
 	config.ParentalControl.config_sections = ConfigSubsection()
 	config.ParentalControl.config_sections.main_menu = ConfigYesNo(default = False)
+	config.ParentalControl.config_sections.spamenu = ConfigYesNo(default = False)
 	config.ParentalControl.config_sections.configuration = ConfigYesNo(default = False)
 	config.ParentalControl.config_sections.timer_menu = ConfigYesNo(default = False)
 	config.ParentalControl.config_sections.plugin_browser = ConfigYesNo(default = False)
