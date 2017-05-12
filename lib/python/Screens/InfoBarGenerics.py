@@ -2128,6 +2128,8 @@ class InfoBarExtensions:
 		self.addExtension(extension = self.getCCcamInfo, type = InfoBarExtensions.EXTENSION_LIST)
 		self.addExtension(extension = self.getOScamInfo, type = InfoBarExtensions.EXTENSION_LIST)
 		self.addExtension(extension = self.getIpkUninstall, type = InfoBarExtensions.EXTENSION_LIST)
+		if fileExists('/usr/lib/enigma2/python/Plugins/Extensions/spaTeam/SoftcamPanel.pyo'):
+			self.addExtension(extension = self.getSoftcamPanel, type = InfoBarExtensions.EXTENSION_LIST)
 
 		for p in plugins.getPlugins(PluginDescriptor.WHERE_EXTENSIONSINGLE):
 			p(self)
@@ -2170,6 +2172,15 @@ class InfoBarExtensions:
 
 	def getIpkUninstall(self):
 		return [((boundFunction(self.getIpkUninstallname), boundFunction(self.openIpkUninstall), lambda: True), None)]
+
+	def getSoftcamPanelname(self):
+		return _("Softcam-Panel")
+
+	def getSoftcamPanel(self):
+		if config.plugins.showinfopanelextensions.value:
+			return [((boundFunction(self.getSoftcamPanelname), boundFunction(self.openSoftcamPanel), lambda: True), None)]
+		else:
+			return []
 
 	def addExtension(self, extension, key = None, type = EXTENSION_SINGLE):
 		self.list.append((type, extension, key))
@@ -2244,6 +2255,10 @@ class InfoBarExtensions:
 	def openIpkUninstall(self):
 		from Screens.Ipkuninstall import Ipkuninstall
 		self.session.open(Ipkuninstall)
+
+	def openSoftcamPanel(self):
+		from Plugins.Extensions.spaTeam.SoftcamPanel import SoftcamPanel
+		self.session.open(SoftcamPanel)
 
 from Tools.BoundFunction import boundFunction
 import inspect
