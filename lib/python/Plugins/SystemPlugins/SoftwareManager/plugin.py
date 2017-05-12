@@ -21,7 +21,6 @@ from Components.Console import Console
 from Components.MultiContent import MultiContentEntryText, MultiContentEntryPixmapAlphaTest
 from Components.SelectionList import SelectionList
 from Components.PluginComponent import plugins
-from Plugins.Extensions.spaTeam.SoftwarePanel import SoftwarePanel
 from Components.PackageInfo import PackageInfoHandler
 from Components.Language import language
 from Components.AVSwitch import AVSwitch
@@ -46,6 +45,11 @@ from BackupRestore import InitConfig as BackupRestore_InitConfig
 from SoftwareTools import iSoftwareTools
 import os
 from boxbranding import getBoxType, getMachineBrand, getMachineName, getBrandOEM
+
+try:
+	from Plugins.Extensions.spaTeam.SoftwarePanel import SoftwarePanel
+except:
+	pass
 
 boxtype = getBoxType()
 brandoem = getBrandOEM()
@@ -171,7 +175,8 @@ class UpdatePluginMenu(Screen):
 		if self.menu == 0:
 			print "building menu entries"
 			self.list.append(("install-extensions", _("Manage extensions"), _("\nManage extensions or plugins for your %s %s") % (getMachineBrand(), getMachineName()) + self.oktext, None))
-			self.list.append(("software-update", _("Software update"), _("\nOnline update of your %s %s software.") % (getMachineBrand(), getMachineName()) + self.oktext, None))
+			if fileExists("/usr/lib/enigma2/python/Plugins/Extensions/spaTeam/SoftwarePanel.pyo"):
+				self.list.append(("software-update", _("Software update"), _("\nOnline update of your %s %s software.") % (getMachineBrand(), getMachineName()) + self.oktext, None))
 			self.list.append(("software-restore", _("Software restore"), _("\nRestore your %s %s with a new firmware.") % (getMachineBrand(), getMachineName()) + self.oktext, None))
 			if not boxtype.startswith('az') and not boxtype in ('dm500hd','dm500hdv2','dm520','dm800','dm800se','dm800sev2','dm820','dm7020hd','dm7020hdv2','dm7080','dm8000') and not brandoem.startswith('cube') and not brandoem.startswith('wetek'):
 				self.list.append(("flash-online", _("Flash Online/Local"), _("\nFlash on the fly your %s %s.") % (getMachineBrand(), getMachineName()) + self.oktext, None))
@@ -306,7 +311,7 @@ class UpdatePluginMenu(Screen):
 		if current:
 			currentEntry = current[0]
 			if self.menu == 0:
-				if (currentEntry == "software-update"):
+				if (currentEntry == "software-update") and fileExists("/usr/lib/enigma2/python/Plugins/Extensions/spaTeam/SoftwarePanel.pyo"):
 					self.session.open(SoftwarePanel, self.skin_path)
 				elif (currentEntry == "software-restore"):
 					self.session.open(ImageWizard)
