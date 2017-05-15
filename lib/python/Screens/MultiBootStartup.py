@@ -294,7 +294,7 @@ class MultiBootStartup(Screen):
 				print "[MultiBootStartup] Command line in '/boot/STARTUP' - problem with not matching entries!"
 				ret = True
 			#verify length
-			elif ('boxmode' not in ENTRY and len(ENTRY) > 96) or ('boxmode' in ENTRY and len(ENTRY) > 114):
+			elif ('boxmode' not in ENTRY and len(ENTRY) > 96) or ('boxmode' in ENTRY and len(ENTRY) > 115):
 				print "[MultiBootStartup] Command line in '/boot/STARTUP' - problem with line length!"
 				ret = True
 			#verify boxmode
