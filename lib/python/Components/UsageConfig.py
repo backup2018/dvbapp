@@ -111,13 +111,17 @@ def InitUsageConfig():
 
 	config.usage.sort_settings = ConfigYesNo(default = False)
 	config.usage.sort_menus = ConfigYesNo(default = False)
-	
+
 	config.usage.plugins_sort_mode = ConfigSelection(default = "user", choices = [
 		("a_z", _("alphabetical")),
 		("default", _("Default")),
 		("user", _("user defined")),])
 	config.usage.plugin_sort_weight = ConfigDictionarySet()
-
+	config.usage.menu_sort_weight = ConfigDictionarySet(default = { "mainmenu" : {"submenu" : {} }})
+	config.usage.menu_sort_mode = ConfigSelection(default = "user", choices = [
+		("a_z", _("alphabetical")),
+		("default", _("Default")),
+		("user", _("user defined")),])
 	config.usage.sort_pluginlist = ConfigYesNo(default = True)
 
 	choicelist = []
