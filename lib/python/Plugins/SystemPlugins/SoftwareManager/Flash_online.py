@@ -14,14 +14,14 @@ from Screens.HelpMenu import HelpableScreen
 from Screens.TaskView import JobView
 from Tools.Downloader import downloadWithProgress
 from enigma import fbClass,getDesktop
-from Plugins.SystemPlugins.DeviceManager.HddSetup import HddSetup
+from Plugins.Extensions.spaTeam.MountManager import HddMount
 from Components.Harddisk import harddiskmanager
-# from bs4 import BeautifulSoup
 import urllib2
 import os
 import shutil
 import math
 from boxbranding import getBoxType,  getImageDistro, getMachineName, getMachineBrand, getImageVersion, getMachineKernelFile, getMachineRootFile, getMachineBuild
+
 distro =  getImageDistro()
 ImageVersion = getImageVersion()
 ROOTFSBIN = getMachineRootFile()
@@ -40,84 +40,76 @@ def esHD():
 	else:
 		return False
 
-def debugtxt(loque):
-	if loque=="":
-		os.system("echo '' > /etc/debug_flash_online.log")
-		os.system("date >> /etc/debug_flash_online.log")
-		os.system("echo '****************************' >> /etc/debug_flash_online.log")
-	else:
-		os.system("echo '"+loque+"' >> /etc/debug_flash_online.log")
-
 def Freespace(dev):
 	statdev = os.statvfs(dev)
 	space = (statdev.f_bavail * statdev.f_frsize) / 1024
 	print "[Flash Online] Free space on %s = %i kilobytes" %(dev, space)
 	return space
-	
+
 class miJobView(JobView):
 	if esHD():
 		skin = """
 		<screen name="miJobView" position="center,center" size="820,380" title="Donwload">
-		<widget source="job_name" render="Label" position="19,22" size="790,50" font="Regular; 20" valign="top" halign="left" transparent="1" />
-		<widget source="job_task" render="Label" position="49,95" size="760,60" font="Regular; 21" valign="top" transparent="1" />
-		<widget source="job_progress" render="Progress" position="20,199" size="780,12" borderWidth="2" backgroundColor="#002211" borderColor="#99ff00" foregroundColor="#99ff00" />
-		<widget source="job_progress" render="Label" position="19,155" size="781,40" font="Regular; 22" foregroundColor="foreground" zPosition="2" halign="center" transparent="1">
-			<convert type="ProgressToText" />
-		</widget>
-		<widget source="job_status" render="Label" position="19,223" size="782,45" font="Regular;23" transparent="1" />
-		<widget name="config" position="19,264" size="782,20" transparent="1" />
-		<widget source="cancelable" render="Pixmap" pixmap="skin_default/buttons/red_HD.png" position="8,330" size="140,40" alphatest="on">
-			<convert type="ConditionalShowHide" />
-		</widget>
-		<widget source="cancelable" render="FixedLabel" text="Cancel" position="8,330" zPosition="1" size="140,40" font="Regular; 18" halign="center" valign="center" backgroundColor="#9f1313" transparent="1">
-			<convert type="ConditionalShowHide" />
-		</widget>
-		<widget source="finished" render="Pixmap" pixmap="skin_default/buttons/green_HD.png" position="374,330" size="140,40" alphatest="on">
-			<convert type="ConditionalShowHide" />
-		</widget>
-		<widget source="finished" render="FixedLabel" text="OK" font="Regular; 18" halign="center" valign="center" position="374,330" size="140,40" transparent="1" backgroundColor="#1f771f">
-			<convert type="ConditionalShowHide" />
-		</widget>
-		<widget source="backgroundable" render="Pixmap" pixmap="skin_default/buttons/blue.png" position="661,330" size="140,40" alphatest="on">
-			<convert type="ConditionalShowHide" />
-		</widget>
-		<widget source="backgroundable" render="FixedLabel" text="Continue in background" font="Regular; 18" halign="center" valign="center" position="661,330" size="140,40" transparent="1" backgroundColor="#18188b">
-			<convert type="ConditionalShowHide" />
-		</widget>
-		<eLabel name="flecha" position="19,96" size="85,60" text="&gt;&gt;" font="Regular; 17" valign="top" transparent="1" />
-		<eLabel name="" position="19,75" size="790,1" backgroundColor="foreground" />
+			<widget source="job_name" render="Label" position="19,22" size="790,50" font="Regular; 20" valign="top" halign="left" transparent="1" />
+			<widget source="job_task" render="Label" position="49,95" size="760,60" font="Regular; 21" valign="top" transparent="1" />
+			<widget source="job_progress" render="Progress" position="20,199" size="780,12" borderWidth="2" backgroundColor="#002211" borderColor="#99ff00" foregroundColor="#99ff00" />
+			<widget source="job_progress" render="Label" position="19,155" size="781,40" font="Regular; 22" foregroundColor="foreground" zPosition="2" halign="center" transparent="1">
+				<convert type="ProgressToText" />
+			</widget>
+			<widget source="job_status" render="Label" position="19,223" size="782,45" font="Regular;23" transparent="1" />
+			<widget name="config" position="19,264" size="782,20" transparent="1" />
+			<widget source="cancelable" render="Pixmap" pixmap="skin_default/buttons/red_HD.png" position="8,330" size="140,40" alphatest="on">
+				<convert type="ConditionalShowHide" />
+			</widget>
+			<widget source="cancelable" render="FixedLabel" text="Cancel" position="8,330" zPosition="1" size="140,40" font="Regular; 18" halign="center" valign="center" backgroundColor="#9f1313" transparent="1">
+				<convert type="ConditionalShowHide" />
+			</widget>
+			<widget source="finished" render="Pixmap" pixmap="skin_default/buttons/green_HD.png" position="374,330" size="140,40" alphatest="on">
+				<convert type="ConditionalShowHide" />
+			</widget>
+			<widget source="finished" render="FixedLabel" text="OK" font="Regular; 18" halign="center" valign="center" position="374,330" size="140,40" transparent="1" backgroundColor="#1f771f">
+				<convert type="ConditionalShowHide" />
+			</widget>
+			<widget source="backgroundable" render="Pixmap" pixmap="skin_default/buttons/blue.png" position="661,330" size="140,40" alphatest="on">
+				<convert type="ConditionalShowHide" />
+			</widget>
+			<widget source="backgroundable" render="FixedLabel" text="Continue in background" font="Regular; 18" halign="center" valign="center" position="661,330" size="140,40" transparent="1" backgroundColor="#18188b">
+				<convert type="ConditionalShowHide" />
+			</widget>
+			<eLabel name="flecha" position="19,96" size="85,60" text="&gt;&gt;" font="Regular; 17" valign="top" transparent="1" />
+			<eLabel name="" position="19,75" size="790,1" backgroundColor="foreground" />
 		</screen>"""
 	else:
 		skin = """
 		<screen name="miJobView" position="230,140" size="820,380" title="Donwload">
-		<widget source="job_name" render="Label" position="19,22" size="790,50" font="Regular; 20" valign="top" halign="left" transparent="1" />
-		<widget source="job_task" render="Label" position="49,95" size="760,60" font="Regular; 21" valign="top" transparent="1" />
-		<widget source="job_progress" render="Progress" position="20,199" size="780,12" borderWidth="2" backgroundColor="#002211" borderColor="#99ff00" foregroundColor="#99ff00" />
-		<widget source="job_progress" render="Label" position="19,162" size="781,32" font="Regular; 22" foregroundColor="foreground" zPosition="2" halign="center" transparent="1">
-			<convert type="ProgressToText" />
-		</widget>
-		<widget source="job_status" render="Label" position="19,223" size="782,26" font="Regular;23" transparent="1" />
-		<widget name="config" position="19,264" size="782,20" transparent="1" />
-		<widget source="cancelable" render="Pixmap" pixmap="skin_default/buttons/red.png" position="8,330" size="140,40" alphatest="on">
-			<convert type="ConditionalShowHide" />
-		</widget>
-		<widget source="cancelable" render="FixedLabel" text="Cancel" position="8,330" zPosition="1" size="140,40" font="Regular; 18" halign="center" valign="center" backgroundColor="#9f1313" transparent="1">
-			<convert type="ConditionalShowHide" />
-		</widget>
-		<widget source="finished" render="Pixmap" pixmap="skin_default/buttons/green.png" position="374,330" size="140,40" alphatest="on">
-			<convert type="ConditionalShowHide" />
-		</widget>
-		<widget source="finished" render="FixedLabel" text="OK" font="Regular; 18" halign="center" valign="center" position="374,330" size="140,40" transparent="1" backgroundColor="#1f771f">
-			<convert type="ConditionalShowHide" />
-		</widget>
-		<widget source="backgroundable" render="Pixmap" pixmap="skin_default/buttons/blue.png" position="661,330" size="140,40" alphatest="on">
-			<convert type="ConditionalShowHide" />
-		</widget>
-		<widget source="backgroundable" render="FixedLabel" text="Continue in background" font="Regular; 18" halign="center" valign="center" position="661,330" size="140,40" transparent="1" backgroundColor="#18188b">
-			<convert type="ConditionalShowHide" />
-		</widget>
-		<eLabel name="flecha" position="19,96" size="85,60" text="&gt;&gt;" font="Regular; 17" valign="top" transparent="1" />
-		<eLabel name="" position="19,75" size="790,1" backgroundColor="foreground" />
+			<widget source="job_name" render="Label" position="19,22" size="790,50" font="Regular; 20" valign="top" halign="left" transparent="1" />
+			<widget source="job_task" render="Label" position="49,95" size="760,60" font="Regular; 21" valign="top" transparent="1" />
+			<widget source="job_progress" render="Progress" position="20,199" size="780,12" borderWidth="2" backgroundColor="#002211" borderColor="#99ff00" foregroundColor="#99ff00" />
+			<widget source="job_progress" render="Label" position="19,162" size="781,32" font="Regular; 22" foregroundColor="foreground" zPosition="2" halign="center" transparent="1">
+				<convert type="ProgressToText" />
+			</widget>
+			<widget source="job_status" render="Label" position="19,223" size="782,26" font="Regular;23" transparent="1" />
+			<widget name="config" position="19,264" size="782,20" transparent="1" />
+			<widget source="cancelable" render="Pixmap" pixmap="skin_default/buttons/red.png" position="8,330" size="140,40" alphatest="on">
+				<convert type="ConditionalShowHide" />
+			</widget>
+			<widget source="cancelable" render="FixedLabel" text="Cancel" position="8,330" zPosition="1" size="140,40" font="Regular; 18" halign="center" valign="center" backgroundColor="#9f1313" transparent="1">
+				<convert type="ConditionalShowHide" />
+			</widget>
+			<widget source="finished" render="Pixmap" pixmap="skin_default/buttons/green.png" position="374,330" size="140,40" alphatest="on">
+				<convert type="ConditionalShowHide" />
+			</widget>
+			<widget source="finished" render="FixedLabel" text="OK" font="Regular; 18" halign="center" valign="center" position="374,330" size="140,40" transparent="1" backgroundColor="#1f771f">
+				<convert type="ConditionalShowHide" />
+			</widget>
+			<widget source="backgroundable" render="Pixmap" pixmap="skin_default/buttons/blue.png" position="661,330" size="140,40" alphatest="on">
+				<convert type="ConditionalShowHide" />
+			</widget>
+			<widget source="backgroundable" render="FixedLabel" text="Continue in background" font="Regular; 18" halign="center" valign="center" position="661,330" size="140,40" transparent="1" backgroundColor="#18188b">
+				<convert type="ConditionalShowHide" />
+			</widget>
+			<eLabel name="flecha" position="19,96" size="85,60" text="&gt;&gt;" font="Regular; 17" valign="top" transparent="1" />
+			<eLabel name="" position="19,75" size="790,1" backgroundColor="foreground" />
 		</screen>"""
 
 	def __init__(self, session, job, parent=None, cancelable = True, backgroundable = True, afterEventChangeable = True):
@@ -160,69 +152,69 @@ def chkDevices():
 class FlashOnline(Screen):
 	if esHD():
 		skin = """
- 		<screen name="FlashOnline" position="center,center" size="1170,780" title="Flash On the Fly" backgroundColor="background">
- 		<ePixmap position="0,720" zPosition="1" size="210,60" pixmap="skin_default/buttons/red.png" transparent="1" alphatest="on" />
- 		<ePixmap position="210,720" zPosition="1" size="210,60" pixmap="skin_default/buttons/green.png" transparent="1" alphatest="on" />
- 		<ePixmap position="420,720" zPosition="1" size="210,60" pixmap="skin_default/buttons/yellow.png" transparent="1" alphatest="on" name="kye" />
- 		<ePixmap position="630,720" zPosition="1" size="210,60" pixmap="skin_default/buttons/blue.png" transparent="1" alphatest="on" />
- 		<widget name="key_red" render="Label" position="0,720" zPosition="2" size="210,60" valign="center" halign="center" font="Regular;21" transparent="1" borderColor="black" borderWidth="1" />
- 		<widget name="key_green" render="Label" position="210,720" zPosition="2" size="210,60" valign="center" halign="center" font="Regular;21" transparent="1" borderColor="black" borderWidth="1" />
- 		<widget name="key_yellow" render="Label" position="420,720" zPosition="2" size="210,60" valign="center" halign="center" font="Regular;21" transparent="1" borderColor="black" borderWidth="1" />
- 		<widget name="key_blue" render="Label" position="630,720" zPosition="2" size="210,60" valign="center" halign="center" font="Regular;21" transparent="1" borderColor="black" borderWidth="1" />
- 		<widget name="info-online" position="30,27" zPosition="5" size="1110,90" font="Regular;20" halign="left" valign="top" transparent="1" />
- 		<widget name="info-local" position="30,180" zPosition="5" size="1110,280" font="Regular;20" halign="left" valign="top" transparent="1" />
- 			<eLabel name="fondo1" position="15,13" size="1140,120" zPosition="2" />
- 			<eLabel name="borde1" position="13,12" size="1143,123" zPosition="0" backgroundColor="foreground" />
- 			<eLabel name="fondo2" position="15,165" size="1140,313" zPosition="2" />
- 			<eLabel name="borde2" position="13,163" size="1143,316" zPosition="0" backgroundColor="foreground" />
- 		<widget font="Regular; 22" halign="left" position="12,502" render="Label" size="1132,40" source="global.CurrentTime" transparent="1">
- 			<convert type="spaSysInfo">Version</convert>
- 		</widget>
-     <widget font="Regular; 18" halign="right" position="15,567" render="Label" size="1131,42" source="session.RecordState" transparent="1" noWrap="1" borderColor="#000000" borderWidth="1">
-       <convert type="spaSysInfo">MemTotalLong</convert>
-     </widget>
- 	    <widget font="Regular; 18" halign="right" position="15,615" render="Label" size="1131,91" source="session.CurrentService" transparent="1" valign="top" borderColor="#000000" borderWidth="1">
-       <convert type="spaSysInfo">DiskAllSleep</convert>
-       <!-- Flash -->
-     </widget>
-	</screen>""" 
+		<screen name="FlashOnline" position="center,center" size="1170,780" title="Flash On the Fly" backgroundColor="background">
+			<ePixmap position="0,720" zPosition="1" size="210,60" pixmap="skin_default/buttons/red.png" transparent="1" alphatest="on" />
+			<ePixmap position="210,720" zPosition="1" size="210,60" pixmap="skin_default/buttons/green.png" transparent="1" alphatest="on" />
+			<ePixmap position="420,720" zPosition="1" size="210,60" pixmap="skin_default/buttons/yellow.png" transparent="1" alphatest="on" name="kye" />
+			<ePixmap position="630,720" zPosition="1" size="210,60" pixmap="skin_default/buttons/blue.png" transparent="1" alphatest="on" />
+			<widget name="key_red" render="Label" position="0,720" zPosition="2" size="210,60" valign="center" halign="center" font="Regular;21" transparent="1" borderColor="black" borderWidth="1" />
+			<widget name="key_green" render="Label" position="210,720" zPosition="2" size="210,60" valign="center" halign="center" font="Regular;21" transparent="1" borderColor="black" borderWidth="1" />
+			<widget name="key_yellow" render="Label" position="420,720" zPosition="2" size="210,60" valign="center" halign="center" font="Regular;21" transparent="1" borderColor="black" borderWidth="1" />
+			<widget name="key_blue" render="Label" position="630,720" zPosition="2" size="210,60" valign="center" halign="center" font="Regular;21" transparent="1" borderColor="black" borderWidth="1" />
+			<widget name="info-online" position="30,27" zPosition="5" size="1110,90" font="Regular;20" halign="left" valign="top" transparent="1" />
+			<widget name="info-local" position="30,180" zPosition="5" size="1110,280" font="Regular;20" halign="left" valign="top" transparent="1" />
+			<eLabel name="fondo1" position="15,13" size="1140,120" zPosition="2" />
+			<eLabel name="borde1" position="13,12" size="1143,123" zPosition="0" backgroundColor="foreground" />
+			<eLabel name="fondo2" position="15,165" size="1140,313" zPosition="2" />
+			<eLabel name="borde2" position="13,163" size="1143,316" zPosition="0" backgroundColor="foreground" />
+			<widget font="Regular; 22" halign="left" position="12,502" render="Label" size="1132,40" source="global.CurrentTime" transparent="1">
+				<convert type="spaSysInfo">Version</convert>
+			</widget>
+			<widget font="Regular; 18" halign="right" position="15,567" render="Label" size="1131,42" source="session.RecordState" transparent="1" noWrap="1" borderColor="#000000" borderWidth="1">
+				<convert type="spaSysInfo">MemTotalLong</convert>
+			</widget>
+			<widget font="Regular; 18" halign="right" position="15,615" render="Label" size="1131,91" source="session.CurrentService" transparent="1" valign="top" borderColor="#000000" borderWidth="1">
+				<convert type="spaSysInfo">DiskAllSleep</convert>
+			</widget>
+		</screen>""" 
 	else:
 		skin = """
 		<screen name="FlashOnline" position="center,center" size="780,520" title="Flash On the Fly" backgroundColor="background">
-		<ePixmap position="0,480" zPosition="1" size="140,40" pixmap="skin_default/buttons/red.png" transparent="1" alphatest="on" />
-		<ePixmap position="140,480" zPosition="1" size="140,40" pixmap="skin_default/buttons/green.png" transparent="1" alphatest="on" />
-		<ePixmap position="280,480" zPosition="1" size="140,40" pixmap="skin_default/buttons/yellow.png" transparent="1" alphatest="on" name="kye" />
-		<ePixmap position="420,480" zPosition="1" size="140,40" pixmap="skin_default/buttons/blue.png" transparent="1" alphatest="on" />
-		<widget name="key_red" render="Label" position="0,480" zPosition="2" size="140,40" valign="center" halign="center" font="Regular;21" transparent="1" borderColor="black" borderWidth="1" />
-		<widget name="key_green" render="Label" position="140,480" zPosition="2" size="140,40" valign="center" halign="center" font="Regular;21" transparent="1" borderColor="black" borderWidth="1" />
-		<widget name="key_yellow" render="Label" position="280,480" zPosition="2" size="140,40" valign="center" halign="center" font="Regular;21" transparent="1" borderColor="black" borderWidth="1" />
-		<widget name="key_blue" render="Label" position="420,480" zPosition="2" size="140,40" valign="center" halign="center" font="Regular;21" transparent="1" borderColor="black" borderWidth="1" />
-		<widget name="info-online" position="20,18" zPosition="5" size="740,60" font="Regular;20" halign="left" valign="top" transparent="1" />
-		<widget name="info-local" position="20,120" zPosition="5" size="740,187" font="Regular;20" halign="left" valign="top" transparent="1" />
+			<ePixmap position="0,480" zPosition="1" size="140,40" pixmap="skin_default/buttons/red.png" transparent="1" alphatest="on" />
+			<ePixmap position="140,480" zPosition="1" size="140,40" pixmap="skin_default/buttons/green.png" transparent="1" alphatest="on" />
+			<ePixmap position="280,480" zPosition="1" size="140,40" pixmap="skin_default/buttons/yellow.png" transparent="1" alphatest="on" name="kye" />
+			<ePixmap position="420,480" zPosition="1" size="140,40" pixmap="skin_default/buttons/blue.png" transparent="1" alphatest="on" />
+			<widget name="key_red" render="Label" position="0,480" zPosition="2" size="140,40" valign="center" halign="center" font="Regular;21" transparent="1" borderColor="black" borderWidth="1" />
+			<widget name="key_green" render="Label" position="140,480" zPosition="2" size="140,40" valign="center" halign="center" font="Regular;21" transparent="1" borderColor="black" borderWidth="1" />
+			<widget name="key_yellow" render="Label" position="280,480" zPosition="2" size="140,40" valign="center" halign="center" font="Regular;21" transparent="1" borderColor="black" borderWidth="1" />
+			<widget name="key_blue" render="Label" position="420,480" zPosition="2" size="140,40" valign="center" halign="center" font="Regular;21" transparent="1" borderColor="black" borderWidth="1" />
+			<widget name="info-online" position="20,18" zPosition="5" size="740,60" font="Regular;20" halign="left" valign="top" transparent="1" />
+			<widget name="info-local" position="20,120" zPosition="5" size="740,187" font="Regular;20" halign="left" valign="top" transparent="1" />
 			<eLabel name="fondo1" position="10,9" size="760,80" zPosition="2" />
 			<eLabel name="borde1" position="9,8" size="762,82" zPosition="0" backgroundColor="foreground" />
 			<eLabel name="fondo2" position="10,110" size="760,209" zPosition="2" />
 			<eLabel name="borde2" position="9,109" size="762,211" zPosition="0" backgroundColor="foreground" />
-		<widget font="Regular; 22" halign="left" position="8,335" render="Label" size="755,27" source="global.CurrentTime" transparent="1">
-			<convert type="spaSysInfo">Version</convert>
-		</widget>
-    <widget font="Regular; 18" halign="right" position="10,378" render="Label" size="754,28" source="session.RecordState" transparent="1" noWrap="1" borderColor="#000000" borderWidth="1">
-      <convert type="spaSysInfo">MemTotalLong</convert>
-    </widget>
-	    <widget font="Regular; 18" halign="right" position="10,410" render="Label" size="754,61" source="session.CurrentService" transparent="1" valign="top" borderColor="#000000" borderWidth="1">
-      <convert type="spaSysInfo">DiskAllSleep</convert>
-      <!-- Flash -->
-    </widget>
-</screen>"""
+			<widget font="Regular; 22" halign="left" position="8,335" render="Label" size="755,27" source="global.CurrentTime" transparent="1">
+				<convert type="spaSysInfo">Version</convert>
+			</widget>
+			<widget font="Regular; 18" halign="right" position="10,378" render="Label" size="754,28" source="session.RecordState" transparent="1" noWrap="1" borderColor="#000000" borderWidth="1">
+				<convert type="spaSysInfo">MemTotalLong</convert>
+			</widget>
+			<widget font="Regular; 18" halign="right" position="10,410" render="Label" size="754,61" source="session.CurrentService" transparent="1" valign="top" borderColor="#000000" borderWidth="1">
+				<convert type="spaSysInfo">DiskAllSleep</convert>
+			</widget>
+		</screen>"""
 
-	def __init__(self, session,spznew=False):
+	def __init__(self, session):
 		Screen.__init__(self, session)
 		self.session = session
 		self.selection = 0
+
 		if getMachineBuild() in ("hd51","vs1500"):
 			self.devrootfs = "/dev/mmcblk0p3"
 		else:
 			self.devrootfs = "/dev/mmcblk1p3"
+
 		self.multi = 1
 		self.list = self.list_files("/boot")
 
@@ -231,10 +223,11 @@ class FlashOnline(Screen):
 			self["key_yellow"] = Button(_("STARTUP"))
 		else:
 			self["key_yellow"] = Button("")
+
 		self["key_green"] = Button("Online")
 		self["key_red"] = Button(_("Exit"))
 		self["key_blue"] = Button("Local")
-		
+
 		self["actions"] = ActionMap(["OkCancelActions", "ColorActions"], 
 		{
 			"blue": self.blue,
@@ -249,7 +242,7 @@ class FlashOnline(Screen):
 			self.multi = self.read_startup("/boot/" + self.list[self.selection]).split(".",1)[1].split(" ",1)[0]
 			self.multi = self.multi[-1:]
 			print "[Flash Online] MULTI:",self.multi
-		self.spanewfirm=spznew
+
 		mediapath = chkDevices()[0]
 		imagePath = chkDevices()[1]
 		self.mediapath = mediapath
@@ -261,13 +254,10 @@ class FlashOnline(Screen):
 			infolabel=_("Local = Flash a image from local path ") + mediapath + _("images")
 		else:
 			infolabel=_("Local = Flash a image from local path device. Try device after pressing blue button")
-		if not spznew:
-			infolabel=infolabel+"\n\n****************************\n\n"+_("Remember that you can use openSPA updates wizard plugin for install new firms and make a copy of your data")
 		self["info-local"] = Label(infolabel)
 		self["info-online"] = Label(_("Online = Download a image and flash it"))
 
 	def check_hdd(self):
-		
 		if not os.path.exists(self.mediapath):
 			self.session.open(MessageBox, _("No device found !!\nPlease make sure you have a device mounted.\n\nExit plugin."), type = MessageBox.TYPE_ERROR)
 			return False
@@ -299,7 +289,7 @@ class FlashOnline(Screen):
 	def blue(self):
 		if mont == 1:
 			if self.check_hdd():
-				self.session.open(doFlashImage, online = False, list=self.list[self.selection], multi=self.multi, devrootfs=self.devrootfs,spznew=self.spanewfirm, mediapath=self.mediapath, imagePath = self.imagePath, flashPath = self.flashPath)
+				self.session.open(doFlashImage, online = False, list=self.list[self.selection], multi=self.multi, devrootfs=self.devrootfs, mediapath=self.mediapath, imagePath = self.imagePath, flashPath = self.flashPath)
 			else:
 				self.close()
 		elif mont > 1:
@@ -308,7 +298,7 @@ class FlashOnline(Screen):
 	def green(self):
 		if mont == 1:
 			if self.check_hdd():
-				self.session.open(doFlashImage, online = True, list=self.list[self.selection], multi=self.multi, devrootfs=self.devrootfs,spznew=self.spanewfirm, mediapath=self.mediapath, imagePath = self.imagePath, flashPath = self.flashPath)
+				self.session.open(doFlashImage, online = True, list=self.list[self.selection], multi=self.multi, devrootfs=self.devrootfs, mediapath=self.mediapath, imagePath = self.imagePath, flashPath = self.flashPath)
 			else:
 				self.close()
 		elif mont > 1:
@@ -321,7 +311,7 @@ class FlashOnline(Screen):
 		flashPath = imagePath + '/flash'
 		self.flashPath = flashPath
 		if self.check_hdd():
-			self.session.open(doFlashImage, online = True, list=self.list[self.selection], multi=self.multi, devrootfs=self.devrootfs,spznew=self.spanewfirm, mediapath=self.mediapath, imagePath = self.imagePath, flashPath = self.flashPath)
+			self.session.open(doFlashImage, online = True, list=self.list[self.selection], multi=self.multi, devrootfs=self.devrootfs, mediapath=self.mediapath, imagePath = self.imagePath, flashPath = self.flashPath)
 		else:
 			self.close()
 
@@ -332,7 +322,7 @@ class FlashOnline(Screen):
 		flashPath = imagePath + '/flash'
 		self.flashPath = flashPath
 		if self.check_hdd():
-			self.session.open(doFlashImage, online = False, list=self.list[self.selection], multi=self.multi, devrootfs=self.devrootfs,spznew=self.spanewfirm, mediapath=self.mediapath, imagePath = self.imagePath, flashPath = self.flashPath)
+			self.session.open(doFlashImage, online = False, list=self.list[self.selection], multi=self.multi, devrootfs=self.devrootfs, mediapath=self.mediapath, imagePath = self.imagePath, flashPath = self.flashPath)
 		else:
 			self.close()
 
@@ -412,7 +402,7 @@ class getDevices(Screen):
 			<widget name="info-label" position="9,217" zPosition="1" size="536,125" font="Regular;20" halign="left" valign="top" transparent="1" />
 			<eLabel name="" position="9,199" size="536,1" backgroundColor="grey" />
 		</screen>"""
-		
+
 	def __init__(self, session):
 		Screen.__init__(self, session)
 		self.session = session
@@ -423,7 +413,7 @@ class getDevices(Screen):
 		self["info-label"] = Label(infolabel)
 		self.devicelist = []
 		self["deviceList"] = MenuList(self.devicelist)
-		
+
 		self["actions"] = ActionMap(["OkCancelActions", "ColorActions"], 
 		{
 			"ok": self.ok,
@@ -431,8 +421,9 @@ class getDevices(Screen):
 			"red": self.quit,
 			"cancel": self.quit,
 		}, -2)
+
 		self.onLayoutFinish.append(self.getList)
-	
+
 	def getList(self):
 		self.devicelist = []
 		for p in harddiskmanager.getMountedPartitions():
@@ -442,77 +433,54 @@ class getDevices(Screen):
 			if devi != 'None':
 				self.devicelist.append(texto + ' - ' + montado)
 		self["deviceList"].l.setList(self.devicelist)
-	
+
 	def ok(self):
 		sel = self["deviceList"].l.getCurrentSelection()
 		mediapath = sel.split(' - ')[1]
 		self.close(mediapath)
-		
+
 	def green(self):
-		self.session.openWithCallback(self.back,HddSetup)
-	
+		self.session.openWithCallback(self.back,HddMount)
+
 	def back(self):
 		pass
-		
+
 	def quit(self):
 		for x in self["deviceList"].list:
 			x[1].cancel()
 		self.close('Try device')
-		
+
 from time import time
-from Components.ScrollLabel import ScrollLabel
+
 class doFlashImage(Screen):
 	if esHD():
 		skin = """
-		<screen name="doFlashImageSPZ" position="75,112" size="1815,855" title="Flash On the fly (select a image)">
-		<ePixmap position="0,787" zPosition="1" size="210,60" pixmap="skin_default/buttons/red_HD.png" transparent="1" alphatest="on" />
-		<ePixmap position="210,787" zPosition="1" size="210,60" pixmap="skin_default/buttons/green_HD.png" transparent="1" alphatest="on" />
-		<ePixmap position="420,787" zPosition="1" size="210,60" pixmap="skin_default/buttons/yellow_HD.png" transparent="1" alphatest="on" />
-		<ePixmap position="630,787" zPosition="1" size="210,60" pixmap="skin_default/buttons/blue_HD.png" transparent="1" alphatest="on" />
-		<widget name="key_red" borderColor="black" borderWidth="1" render="Label" position="0,787" zPosition="2" size="210,60" valign="center" halign="center" font="Regular; 18" transparent="1" />
-		<widget name="key_green" render="Label" position="210,787" zPosition="2" size="210,60" valign="center" halign="center" font="Regular; 18" transparent="1" borderColor="black" borderWidth="1" />
-		<widget name="key_yellow" render="Label" position="420,787" zPosition="2" size="210,60" valign="center" halign="center" font="Regular; 18" transparent="1" borderColor="black" borderWidth="1" />
-		<widget name="key_blue" render="Label" position="630,787" zPosition="2" size="210,60" valign="center" halign="center" font="Regular; 18" transparent="1" borderColor="black" borderWidth="1" />
-		<widget name="imageList" position="7,15" zPosition="1" size="972,750" font="Regular; 19" scrollbarMode="showOnDemand" transparent="1" itemHeight="40"/>
-		<ePixmap position="1464,798" zPosition="1" size="210,60" pixmap="skin_default/buttons/key_info.png" transparent="1" alphatest="on" />
-		<widget name="key_menu" position="1525,787" zPosition="2" size="274,60" valign="center" halign="left" font="Regular;21" transparent="1" />
-		<widget name="info" position="1014,37" zPosition="4" size="783,702" valign="top" halign="left" font="Regular; 18" transparent="1" />
-		<eLabel name="borde1" position="993,15" size="1,747" backgroundColor="foreground" zPosition="10" />
-		<eLabel name="borde4" position="1795,15" size="1,747" backgroundColor="foreground" zPosition="10" />
-		<eLabel name="borde2" position="993,15" size="802,1" backgroundColor="foreground" zPosition="10" />
-		<eLabel name="borde3" position="993,762" size="802,1" backgroundColor="foreground" zPosition="10" />
-		<eLabel name="ch1" position="1015,798" size="90,42" text=" [Ch-] " foregroundColor="background" backgroundColor="foreground" font="Regular; 18" halign="center" valign="center" />
-		<eLabel name="ch2" position="1128,798" size="90,42" text=" [Ch+] " foregroundColor="background" backgroundColor="foreground" font="Regular; 18" halign="center" valign="center" />
-	</screen>"""
+		<screen name="doFlashImageSPZ" position="center,center" size="875,855" title="Flash On the fly (select a image)">
+			<ePixmap position="0,787" zPosition="1" size="210,60" pixmap="skin_default/buttons/red_HD.png" transparent="1" alphatest="on" />
+			<ePixmap position="210,787" zPosition="1" size="210,60" pixmap="skin_default/buttons/green_HD.png" transparent="1" alphatest="on" />
+			<ePixmap position="420,787" zPosition="1" size="210,60" pixmap="skin_default/buttons/yellow_HD.png" transparent="1" alphatest="on" />
+			<ePixmap position="630,787" zPosition="1" size="210,60" pixmap="skin_default/buttons/blue_HD.png" transparent="1" alphatest="on" />
+			<widget name="key_red" borderColor="black" borderWidth="1" render="Label" position="0,787" zPosition="2" size="210,60" valign="center" halign="center" font="Regular; 18" transparent="1" />
+			<widget name="key_green" render="Label" position="210,787" zPosition="2" size="210,60" valign="center" halign="center" font="Regular; 18" transparent="1" borderColor="black" borderWidth="1" />
+			<widget name="key_yellow" render="Label" position="420,787" zPosition="2" size="210,60" valign="center" halign="center" font="Regular; 18" transparent="1" borderColor="black" borderWidth="1" />
+			<widget name="key_blue" render="Label" position="630,787" zPosition="2" size="210,60" valign="center" halign="center" font="Regular; 18" transparent="1" borderColor="black" borderWidth="1" />
+			<widget name="imageList" position="7,15" zPosition="1" size="972,750" font="Regular; 19" scrollbarMode="showOnDemand" transparent="1" itemHeight="40"/>
+		</screen>"""
 	else:
 		skin = """
-		<screen name="doFlashImageSPZ" position="50,75" size="1210,570" title="Flash On the fly (select a image)">
-		<ePixmap position="0,525" zPosition="1" size="140,40" pixmap="skin_default/buttons/red.png" transparent="1" alphatest="on" />
-		<ePixmap position="140,525" zPosition="1" size="140,40" pixmap="skin_default/buttons/green.png" transparent="1" alphatest="on" />
-		<ePixmap position="280,525" zPosition="1" size="140,40" pixmap="skin_default/buttons/yellow.png" transparent="1" alphatest="on" />
-		<ePixmap position="420,525" zPosition="1" size="140,40" pixmap="skin_default/buttons/blue.png" transparent="1" alphatest="on" />
-		<widget name="key_red" borderColor="black" borderWidth="1" render="Label" position="0,525" zPosition="2" size="140,40" valign="center" halign="center" font="Regular; 18" transparent="1" />
-		<widget name="key_green" render="Label" position="140,525" zPosition="2" size="140,40" valign="center" halign="center" font="Regular; 18" transparent="1" borderColor="black" borderWidth="1" />
-		<widget name="key_yellow" render="Label" position="280,525" zPosition="2" size="140,40" valign="center" halign="center" font="Regular; 18" transparent="1" borderColor="black" borderWidth="1" />
-		<widget name="key_blue" render="Label" position="420,525" zPosition="2" size="140,40" valign="center" halign="center" font="Regular; 18" transparent="1" borderColor="black" borderWidth="1" />
-		<widget name="imageList" position="9,41" zPosition="1" size="645,475" font="Regular; 19" scrollbarMode="showOnDemand" transparent="1" />
-		<ePixmap position="976,532" zPosition="1" size="140,40" pixmap="skin_default/buttons/key_info.png" transparent="1" alphatest="on" />
-		<widget name="key_menu" position="1017,525" zPosition="2" size="183,40" valign="center" halign="left" font="Regular;21" transparent="1" />
-		<widget name="info" position="676,30" zPosition="4" size="522,468" valign="top" halign="left" font="Regular; 18" transparent="1" />
-		<eLabel name="borde1" position="662,15" size="1,498" backgroundColor="foreground" zPosition="10" />
-		<eLabel name="borde4" position="1197,15" size="1,498" backgroundColor="foreground" zPosition="10" />
-		<eLabel name="borde2" position="662,15" size="535,1" backgroundColor="foreground" zPosition="10" />
-		<eLabel name="borde3" position="662,513" size="535,1" backgroundColor="foreground" zPosition="10" />
+		<screen name="doFlashImageSPZ" position="center,center" size="600,570" title="Flash On the fly (select a image)">
+			<ePixmap position="0,525" zPosition="1" size="140,40" pixmap="skin_default/buttons/red.png" transparent="1" alphatest="on" />
+			<ePixmap position="140,525" zPosition="1" size="140,40" pixmap="skin_default/buttons/green.png" transparent="1" alphatest="on" />
+			<ePixmap position="280,525" zPosition="1" size="140,40" pixmap="skin_default/buttons/yellow.png" transparent="1" alphatest="on" />
+			<ePixmap position="420,525" zPosition="1" size="140,40" pixmap="skin_default/buttons/blue.png" transparent="1" alphatest="on" />
+			<widget name="key_red" borderColor="black" borderWidth="1" render="Label" position="0,525" zPosition="2" size="140,40" valign="center" halign="center" font="Regular; 18" transparent="1" />
+			<widget name="key_green" render="Label" position="140,525" zPosition="2" size="140,40" valign="center" halign="center" font="Regular; 18" transparent="1" borderColor="black" borderWidth="1" />
+			<widget name="key_yellow" render="Label" position="280,525" zPosition="2" size="140,40" valign="center" halign="center" font="Regular; 18" transparent="1" borderColor="black" borderWidth="1" />
+			<widget name="key_blue" render="Label" position="420,525" zPosition="2" size="140,40" valign="center" halign="center" font="Regular; 18" transparent="1" borderColor="black" borderWidth="1" />
+			<widget name="imageList" position="9,41" zPosition="1" size="645,475" font="Regular; 19" scrollbarMode="showOnDemand" transparent="1" />
+		</screen>"""
 
-		<eLabel name="ch1" position="677,532" size="60,28" text=" [Ch-] " foregroundColor="background" backgroundColor="foreground" font="Regular; 18" halign="center" valign="center" />
-		<eLabel name="ch2" position="752,532" size="60,28" text=" [Ch+] " foregroundColor="background" backgroundColor="foreground" font="Regular; 18" halign="center" valign="center" />
-		<widget font="Regular; 20" halign="left" position="6,5" render="Label" size="648,24" source="global.CurrentTime" transparent="1">
-			<convert type="spaSysInfo">Version</convert>
-		</widget>
-	<eLabel name="lineasep" position="6,33" size="648,1" backgroundColor="foreground" />
-</screen>"""
-
-	def __init__(self, session, online, list=None, multi=None, devrootfs=None,spznew=False, mediapath='/media/hdd/',imagePath = '/media/hdd/images',flashPath = '/media/hdd/images/flash'):
+	def __init__(self, session, online, list=None, multi=None, devrootfs=None, mediapath='/media/hdd/',imagePath = '/media/hdd/images',flashPath = '/media/hdd/images/flash'):
 		Screen.__init__(self, session)
 		self.session = session
 
@@ -521,9 +489,7 @@ class doFlashImage(Screen):
 		self["key_red"] = Button(_("Exit"))
 		self["key_blue"] = Button("")
 		self["key_yellow"] = Button("")
-		self["key_menu"] = Button(_("Changelog"))
-		self["info"] = ScrollLabel(_("Changelog")+":\n------------------------\n"+_("Downloading")+". "+_("Wait")+"...")
-		
+
 		self.filename = None
 		self.imagelist = []
 		self.urllist = {}
@@ -534,20 +500,11 @@ class doFlashImage(Screen):
 		self.sel = None
 		self.devrootfs=devrootfs
 		self.feedurl = urlimage
-		self.spanew=spznew
 		self.mediapath = mediapath
 		self.imagePath = imagePath
 		self.flashPath = flashPath
 		self.flashTmp = self.imagePath + '/tmp'
-		debugtxt("")
-		debugtxt("box: "+str(self.box()))
-		debugtxt("multi: "+str(multi))
-		debugtxt("from spanewfirms: "+str(spznew))
-		debugtxt("online: "+str(online))
-		debugtxt("mediapath: "+mediapath)
-		debugtxt("imagePath: "+imagePath)
 
-		self.changelog=self.getchangelog()
 		self["imageList"] = MenuList(self.imagelist)
 		self["actions"] = ActionMap(["OkCancelActions", "ColorActions","EPGSelectActions","DirectionActions"], 
 		{
@@ -557,12 +514,10 @@ class doFlashImage(Screen):
 			"red": self.quit,
 			"blue": self.blue,
 			"cancel": self.quit,
-			"prevBouquet": self.kright,"nextBouquet": self.kleft,
-			"info": self.kmenu,
 		}, -2)
-		self.laconsola=None
+
 		self.onLayoutFinish.append(self.layoutFinished)
-	
+
 	def dummy(self):
 		pass
 
@@ -570,50 +525,6 @@ class doFlashImage(Screen):
 		ts=time()
 		return "&stamp="+str(ts)
 
-	def getchangelog(self):
-		erchange=""
-		newchange=""
-		from Components.Language import language
-		from os import environ
-		lang = language.getLanguage()
-		environ["LANGUAGE"] = lang[:2]
-		debugtxt("Language: "+str(environ["LANGUAGE"]))
-		
-		laurl="https://openspa.info/openspa-team/changelog.php?idioma="+str(environ["LANGUAGE"])+self.getstamp()
-		try:
-			response = urllib2.urlopen(laurl, timeout=10)
-			newchange = response.read()
-		except:
-			pass
-		debugtxt("changelog url: "+str(laurl))
-		if newchange=="":
-			newchange=_("No changelog found. Check internet conection or request support at openspa.info")
-			erchange=_("Changelog")+":\n------------------------\n"+newchange
-		else:
-			erchange=newchange
-
-		self["info"].setText(erchange)
-		
-		# self["info"].lastPage()
-		return erchange
-	def kright(self):
-		self["info"].pageDown()
-	def kleft(self):
-		self["info"].pageUp()
-	def kmenu(self):
-		cmdlist=[]
-		booklist=open("/tmp/changelog.log", "w")
-		booklist.write(self.changelog)
-		booklist.close()
-		message="cat /tmp/changelog.log"
-		cmdlist.append(message)
-		
-		self.laconsola=self.session.open(Console, title = _("Changelog"), cmdlist = cmdlist,finishedCallback = self.consolaArriba,closeOnSuccess = False)
-		
-	def consolaArriba(self):
-		self.laconsola["text"].setText(self.changelog)
-		self.laconsola.setTitle(_("Changelog")+" - "+_("Local file")+": [/tmp/changelog.log]")
-		
 	def quit(self):
 		if self.simulate or self.List not in ("STARTUP","cmdline.txt"):
 			fbClass.getInstance().unlock()
@@ -621,9 +532,7 @@ class doFlashImage(Screen):
 
 	def blue(self):
 		if self.Online:
-			self.getchangelog()
 			self.layoutFinished()
-			
 			return
 		sel = self["imageList"].l.getCurrentSelection()
 		if sel == None:
@@ -670,26 +579,21 @@ class doFlashImage(Screen):
 		if sel == None:
 			print"Nothing to select !!"
 			return
-		
+
 		if self.Online:
 			if not " ->" in sel:
 				return
 			asel=sel
 			sel="openspa-"+sel.split(" ->")[0]+".zip"
-			
-			self["info"].setText("["+sel+"]\n"+_("Wait")+"...\n--------------------------\n"+self.changelog)
+
 			self.filename = self.imagePath + "/" + sel
-			#self.filename = file_name
-			
+
 			self.hide()
 			self.sel = sel
 			box = self.box()
-			debugtxt("filename: "+str(self.filename))
-			debugtxt("selection: "+str(sel))
 			url = self.feedurl + "/" + "/" + sel
 			url = self.urllist[asel] + "/" + sel
 			url=url.replace("Descarga de Im&aacute;genes","Descarga de Imágenes").replace(" ","%20")
-			debugtxt("download url: "+str(url))
 			print "[Flash Online] Download image: >%s<" % url
 
 			if os.path.exists("/etc/OpenSPAfo.xml") and ("beta" in sel.lower()):
@@ -702,26 +606,21 @@ class doFlashImage(Screen):
 					handler = urllib2.HTTPBasicAuthHandler(authinfo)
 					myopener = urllib2.build_opener(handler)
 					opened = urllib2.install_opener(myopener)
-					debugtxt("download beta url: "+str(url)+" - "+lahid+"-"+lahid2)
 					u = urllib2.urlopen(url)
 					total_size = int(u.info().getheaders("Content-Length")[0])
 					downloaded = 0
 					CHUNK = 256 * 1024
 					print "Downloading: %s" % (total_size)
-					debugtxt("Download size: "+str(total_size))
 					with open(self.filename, 'wb') as fp:
 						while True:
 							chunk = u.read(CHUNK)
 							downloaded += len(chunk)
-							debugtxt("Downloading: "+str(downloaded)+" of "+str(total_size))
 							if not chunk: break
 							fp.write(chunk)
 					print "Downloaded: %s Bytes of %s" % (downloaded, total_size)
-					debugtxt("Downloaded: "+str(downloaded)+" of "+str(total_size))
 					self.ImageDownloadCB(False)
 					return
 				except:
-					debugtxt("bad xml file")
 					return
 			try:
 				u = urllib2.urlopen(url)
@@ -734,7 +633,6 @@ class doFlashImage(Screen):
 				self.session.openWithCallback(self.ImageDownloadCB, miJobView, job, backgroundable = False, afterEventChangeable = False)
 			except urllib2.URLError as e:
 				print "[Flash Online] Download failed !!\n%s" % e
-				debugtxt("ERROR DOWNLOAD: "+str(url))
 				self.session.openWithCallback(self.ImageDownloadCB, MessageBox, _("Download Failed !!" + "\n%s\n%s" % (e,url)), type = MessageBox.TYPE_ERROR)
 				self.close()
 		else:
@@ -758,9 +656,6 @@ class doFlashImage(Screen):
 
 	def flashWithPostFlashAction(self, ret = True):
 		if ret:
-			if self.spanew:
-				self.postFlashActionCallback("wizard")
-				return
 			print "flashWithPostFlashAction"
 			title =_("Please select what to do after flashing the image:\n(In addition, if it exists, a local script will be executed as well at /media/hdd/images/config/myrestore.sh)")
 			list = ((_("Flash and start installation wizard"), "wizard"),
@@ -800,7 +695,6 @@ class doFlashImage(Screen):
 		restoreAllPlugins = False
 		restoreSettingsnoPlugin = False
 		if answer is not None:
-			debugtxt("postflashaction: "+str(answer[1]))
 			if answer[1] == "restoresettings":
 				restoreSettings   = True
 			if answer[1] == "restoresettingsnoplugin":
@@ -860,7 +754,6 @@ class doFlashImage(Screen):
 
 	def Start_Flashing(self):
 		print "Start Flashing"
-		debugtxt("flash start")
 		cmdlist = []
 		if os.path.exists(ofgwritePath):
 			text = _("Flashing: ")
@@ -939,8 +832,6 @@ class doFlashImage(Screen):
 					rootfs = False
 
 	def yellow(self):
-		if self.spanew:
-			return
 		if not self.Online:
 			self.session.openWithCallback(self.DeviceBrowserClosed, DeviceBrowser, None, matchingPattern="^.*\.(zip|bin|jffs2|img)", showDirectories=True, showMountpoints=True, inhibitMounts=["/autofs/sr0/"])
 		else:
@@ -990,19 +881,17 @@ class doFlashImage(Screen):
 		self.setTitle(_("Flash online from ") + self.mediapath)
 		self.imagelist = []
 		self.urllist = {}
-		
+
 		if self.Online:
-			if not self.spanew:
-				self["key_yellow"].setText("Backup&Flash")
+			self["key_yellow"].setText("Backup&Flash")
 			self.feedurl = urlimage
 			self["key_blue"].setText("")
 			devx=""
 			if  os.path.exists("/etc/OpenSPAfo.xml"):
 				devx = open("/etc/OpenSPAfo.xml").read().replace("\n","").split("*")[0]
 
-			url = '%s/online/getfirm.php?box=%s%s' % (self.feedurl,box,devx)
+			url = '%s/Alliance/getfirm.php?box=%s%s' % (self.feedurl,box,devx)
 			url=url +self.getstamp()
-			debugtxt("list images url: "+str(url))
 			print "URL ONLINE:[%s]" % (url)
 			try:
 				req = urllib2.Request(url)
@@ -1012,7 +901,7 @@ class doFlashImage(Screen):
 				
 				self["imageList"].l.setList(self.imagelist)
 				return
-			
+
 			try:
 				the_page = response.read()
 
@@ -1022,27 +911,21 @@ class doFlashImage(Screen):
 				return
 
 			lines = the_page.split('\n')
-			#tt = len(box)
+
 			try:
 				
 				l=lines[0]
 				self.feedurl = l.split("<a href='")[1].split("openspa-")[0]
 			except:
-				self["info"].setText("BOX: ["+box+"]\n"+_("No images found for this device. More info in openspa.info")+"\n--------------------------\n"+self.changelog)
 				self.imagelist.append("("+_("No images found for")+" "+box+")")
-			# self.feedurl = BeautifulSoup(self.feedurl).encode('utf-8')
-			# self.feedurl = self.feedurl.encode('utf-8')
-			# self.feedurl = urlimage+"../"
-			
+
 			for line in lines:
 				if line.find(".zip") > -1:
-					#t = line.find("<a href='%s/" % box)
-					#self.imagelist.append(line[t+tt+10:t+tt+tt+40])
 					name=line.split(">")[1].split("<")[0]
 					name=name.replace(" ("," ").replace(" - "," - ").replace(")","").replace("openspa-","").replace(".zip"," ->")
 					self.urllist[name]=line.split("<a href='")[1].split("openspa-")[0]
 					self.imagelist.append(name)
-					
+
 		else:
 			self["key_blue"].setText(_("Delete"))
 			self["key_yellow"].setText(_("Devices"))
@@ -1095,11 +978,9 @@ class ImageDownloadTask(Task):
 		self.download.addProgress(self.download_progress)
 		self.download.start().addCallback(self.download_finished).addErrback(self.download_failed)
 		print "[ImageDownloadTask] downloading", self.url, "to", self.path
-		debugtxt("[ImageDownloadTask]: "+str(self.url)+" to "+self.path)
 
 	def abort(self):
 		print "[ImageDownloadTask] aborting", self.url
-		debugtxt("[ImageDownloadTask]: abort")
 		if self.download:
 			self.download.stop()
 		self.aborted = True
@@ -1114,14 +995,12 @@ class ImageDownloadTask(Task):
 		self.error_message = error_message
 		if error_message == "" and failure_instance is not None:
 			self.error_message = failure_instance.getErrorMessage()
-		debugtxt("[ImageDownloadTask] ERROR:"+str(self.error_message))
 		Task.processFinished(self, 1)
 
 	def download_finished(self, string=""):
 		if self.aborted:
 			self.finish(aborted = True)
 		else:
-			debugtxt("[ImageDownloadTask] FINISH")
 			Task.processFinished(self, 0)
 
 class DeviceBrowser(Screen, HelpableScreen):
