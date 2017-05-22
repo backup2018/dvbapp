@@ -2,10 +2,8 @@ from Screen import Screen
 from Components.ActionMap import ActionMap
 from Components.config import config
 from Components.AVSwitch import AVSwitch
-from Components.Harddisk import internalHDDNotSleeping
+from Components.Harddisk import internalHDDNotSleeping, harddiskmanager
 from Components.SystemInfo import SystemInfo
-from Components.Harddisk import harddiskmanager
-from Tools import Notifications
 from GlobalActions import globalActionMap
 import RecordTimer
 import Components.ParentalControl
@@ -18,7 +16,6 @@ inStandby = None
 class Standby(Screen):
 	def Power(self):
 		print "[Standby] leave standby"
-		self.leaveMute()
 		self.close(True)
 
 	# normally handle only key's 'make' event
@@ -50,16 +47,13 @@ class Standby(Screen):
 		config.hdmicec.TVoffCounter.value += 1
 
 	def setMute(self):
-		if (eDVBVolumecontrol.getInstance().isMuted()):
-			self.wasMuted = 1
-			print "[Standby] mute already active"
-		else:
-			self.wasMuted = 0
-			eDVBVolumecontrol.getInstance().volumeToggleMute()
+		self.wasMuted = eDVBVolumecontrol.getInstance().isMuted()
+		if not self.wasMuted:
+			eDVBVolumecontrol.getInstance().volumeMute()
 
 	def leaveMute(self):
-		if self.wasMuted == 0:
-			eDVBVolumecontrol.getInstance().volumeToggleMute()
+		if not self.wasMuted:
+			eDVBVolumecontrol.getInstance().volumeUnMute()
 
 	def __init__(self, session, StandbyCounterIncrease=True):
 		Screen.__init__(self, session)
@@ -171,6 +165,7 @@ class Standby(Screen):
 		if RecordTimer.RecordTimerEntry.receiveRecordEvents:
 			RecordTimer.RecordTimerEntry.stopTryQuitMainloop()
 		self.avswitch.setInput("ENCODER")
+		self.leaveMute()
 
 	def __onFirstExecBegin(self):
 		global inStandby
