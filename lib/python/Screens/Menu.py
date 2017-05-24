@@ -18,7 +18,7 @@ import xml.etree.cElementTree
 from Screens.Setup import Setup, getSetupTitle
 
 # read the menu
-mdom = xml.etree.cElementTree.parse(resolveFilename(SCOPE_SKIN, 'menu.xml'))
+mdom = xml.etree.cElementTree.parse(resolveFilename(SCOPE_SKIN, 'menuspa.xml'))
 
 menu_path = []
 
