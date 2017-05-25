@@ -8,7 +8,7 @@ install_PYTHON = \
 	ServiceOrbitalPosition.py CryptoInfo.py TextCase.py \
 	ValueBitTest.py TunerInfo.py ConfigEntryTest.py ClientsStreaming.py TemplatedMultiContent.py ProgressToText.py \
 	Combine.py SensorToText.py ValueToPixmap.py PliExtraInfo.py genre.py TransponderInfo.py \
-	RotorPosition.py EtAnalogClock.py StandbyClockVFD.py
+	RotorPosition.py EtAnalogClock.py StandbyClockVFD.py VfdDisplay.py
 
 if HAVE_COLORLCD220
 install_PYTHON += info_timernoVFD.py
