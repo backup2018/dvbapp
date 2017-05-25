@@ -266,6 +266,16 @@ if test x"$withtextlcd" != xno ; then
 fi
 AM_CONDITIONAL(HAVE_TEXTLCD, test x"$withtextlcd" != xno)
 
+AC_ARG_WITH(7segment,
+	AC_HELP_STRING([--with-7segment], [use ascii based lcd, yes or no]),
+	[[with7segment=$withval]],
+	[[with7segment=no]]
+)
+if test x"$with7segment" != xno ; then
+	AC_DEFINE(HAVE_7SEGMENT, 1,[Define when using an ascii based lcd device])
+fi
+AM_CONDITIONAL(HAVE_7SEGMENT, test x"$with7segment" != xno)
+
 AC_ARG_WITH(bwlcd96,
 	AC_HELP_STRING([--with-bwlcd96], [use 96x64 1bpp black and white display, yes or no]),
 	[[withbwlcd96=$withval]],
@@ -740,6 +750,7 @@ AX_SWIG_PYTHON_OPT="$AX_SWIG_PYTHON_OPT -DSWIG_PYTHON_LEGACY_BOOL"
 AC_CONFIG_FILES([
 Makefile
 data/Makefile
+data/7segment/Makefile
 data/displaytext/Makefile
 data/displaydualtext/Makefile
 data/display96/Makefile
