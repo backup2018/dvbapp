@@ -14939,3 +14939,6 @@ msgstr "Canviar el mode de visualització de 12 a 8 caràcters"
 
 msgid "12, show latin-1 characters except for greek and cyrillic, switch to 8 if needed."
 msgstr "12, mostrar caràcters latin-1 a excepció de grec i ciríl·lic, canviar a 8 si cal."
+
+msgid "Save changes"
+msgstr "Guardar canvis"
