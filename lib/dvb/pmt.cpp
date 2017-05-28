@@ -394,6 +394,11 @@ void eDVBServicePMTHandler::AITready(int error)
 				if(!hbbtvUrl.empty())
 				{
 					const char* uu = hbbtvUrl.c_str();
+					struct aitInfo aitinfo;
+					aitinfo.id = appid;
+					aitinfo.name = applicaionName;
+					aitinfo.url = hbbtvUrl;
+					m_aitInfoList.push_back(aitinfo);
 					if(!strncmp(uu, "http://", 7) || !strncmp(uu, "dvb://", 6) || !strncmp(uu, "https://", 8))
 					{
 						if(controlCode == 1) m_HBBTVUrl = hbbtvUrl;
