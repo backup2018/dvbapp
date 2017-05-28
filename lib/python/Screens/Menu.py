@@ -197,6 +197,7 @@ class Menu(Screen, ProtectedScreen):
 				"blue": self.keyBlue,
 			})
 
+		self["key_blue"] = Label(_("Sort"))
 		title = parent.get("title", "").encode("UTF-8") or None
 		title = title and _(title) or _(parent.get("text", "").encode("UTF-8"))
 		self["title"] = StaticText(title)
@@ -340,6 +341,8 @@ class MenuSort(Menu):
 		self["key_green"] = Label(_("Save changes"))
 		self["key_yellow"] = Label(_("Toggle show/hide"))
 		self["key_blue"] = Label(_("Reset order (All)"))
+		self["key_chmas"] = Label(_("Move up"))
+		self["key_chmenos"] = Label(_("Move down"))
 		self.somethingChanged = False
 		Menu.__init__(self, session, parent)
 		self.skinName = "MenuSort"
