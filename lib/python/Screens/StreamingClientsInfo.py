@@ -48,21 +48,35 @@ class StreamingClientsInfo(Screen):
 					strtype = "T"
 				try:
 					raw = socket.gethostbyaddr(ip)
-					ip = raw[0]
+					host = raw[0]
 				except:
-					pass
-				info = ("%s %-8s %s") % (strtype, ip, service_name)
+					host = ""
+				info = ("%s %-8s %s %s") % (strtype, ip, host, service_name)
 				self.clients.append((info, (x[0], x[1])))
 		if StreamServiceList and streamList:
 			for x in StreamServiceList:
+				append = False
 				ip = "ip n/a"
 				service_name = "(unknown service)"
 				for stream in streamList:
 					if hasattr(stream, 'getService') and stream.getService() and stream.getService().__deref__() == x:
 						service_name = ServiceReference(stream.ref.toString()).getServiceName()
 						ip = stream.clientIP or ip
-			info = ("T %s %s %s") % (ip, service_name, _("(VU+ type)"))
-			self.clients.append((info,(-1, x)))
+						try:
+							ip2 = ip.split(":")[-1]
+						except:
+							pass
+						try:
+							raw = socket.gethostbyaddr(ip2)
+							host = raw[0]
+						except:
+							host = ""
+						info = ("T %s %s %s %s") % (ip, host, service_name, _("(VU+ type)"))
+						if not (info,(-1, x)) in self.clients:
+							append = True
+							break
+				if append:
+					self.clients.append((info,(-1, x)))
 		self["menu"].setList(self.clients)
 		if self.clients:
 			self["info"].setText("")
