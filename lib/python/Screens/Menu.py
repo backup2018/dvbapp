@@ -11,17 +11,14 @@ from Components.SystemInfo import SystemInfo
 from Components.Label import Label
 from Tools.BoundFunction import boundFunction
 from Plugins.Plugin import PluginDescriptor
-from Tools.Directories import resolveFilename, fileExists, SCOPE_SKIN
+from Tools.Directories import resolveFilename, SCOPE_SKIN
 
 import xml.etree.cElementTree
 
 from Screens.Setup import Setup, getSetupTitle
 
 # read the menu
-if fileExists('/usr/lib/enigma2/python/Plugins/Extensions/spazeMenu/plugin.pyo') or fileExists('/usr/lib/enigma2/python/Plugins/Extensions/spazeMenu/plugin.so'):
-	mdom = xml.etree.cElementTree.parse(resolveFilename(SCOPE_SKIN, 'menuspa.xml'))
-else:
-	mdom = xml.etree.cElementTree.parse(resolveFilename(SCOPE_SKIN, 'menu.xml'))
+mdom = xml.etree.cElementTree.parse(resolveFilename(SCOPE_SKIN, 'menu.xml'))
 
 menu_path = []
 
