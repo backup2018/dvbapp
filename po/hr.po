@@ -136,7 +136,7 @@ msgstr ""
 
 #
 msgid "%H:%M"
-msgstr "%S:%M"
+msgstr ""
 
 #. TRANSLATORS: short date representation short dayname daynum short monthname in strftime() format! See 'man strftime'
 msgid "%a %e/%m"
