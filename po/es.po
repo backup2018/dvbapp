@@ -14997,3 +14997,6 @@ msgstr "12, mostrar caracteres latin-1 a excepción de griego y cirílico, cambi
 
 msgid "Save changes"
 msgstr "Guardar cambios"
+
+msgid "Logs settings"
+msgstr "Ajustes del log"

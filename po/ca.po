@@ -14942,3 +14942,6 @@ msgstr "12, mostrar caràcters latin-1 a excepció de grec i ciríl·lic, canvia
 
 msgid "Save changes"
 msgstr "Guardar canvis"
+
+msgid "Logs settings"
+msgstr "Configuració del log"
