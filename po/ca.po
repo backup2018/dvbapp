@@ -14945,3 +14945,6 @@ msgstr "Guardar canvis"
 
 msgid "Logs settings"
 msgstr "Configuració del log"
+
+msgid "Sort order for menu entries"
+msgstr "Ordre de les entrades del menú"
