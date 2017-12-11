@@ -43,7 +43,7 @@ class CronTimers(Screen):
 		self['actions'] = ActionMap(['WizardActions', 'ColorActions', "MenuActions"], {'ok': self.info, 'back': self.UninstallCheck, 'red': self.delcron, 'green': self.addtocron, 'yellow': self.CrondStart, 'blue': self.autostart, "menu": self.closeRecursive})
 		if not self.selectionChanged in self["list"].onSelectionChanged:
 			self["list"].onSelectionChanged.append(self.selectionChanged)
-		self.service_name = 'busybox-cron'
+		self.service_name = 'cronie'
 		self.InstallCheck()
 
 	def InstallCheck(self):
@@ -133,19 +133,19 @@ class CronTimers(Screen):
 
 	def CrondStart(self):
 		if not self.my_crond_run:
-			self.Console.ePopen('/etc/init.d/busybox-cron start', self.StartStopCallback)
+			self.Console.ePopen('/etc/init.d/crond start', self.StartStopCallback)
 		elif self.my_crond_run:
-			self.Console.ePopen('/etc/init.d/busybox-cron stop', self.StartStopCallback)
+			self.Console.ePopen('/etc/init.d/crond stop', self.StartStopCallback)
 
 	def StartStopCallback(self, result = None, retval = None, extra_args = None):
 		sleep(3)
 		self.updateList()
 
 	def autostart(self):
-		if fileExists('/etc/rc2.d/S20busybox-cron'):
-			self.Console.ePopen('update-rc.d -f busybox-cron remove')
+		if fileExists('/etc/rc2.d/S90crond'):
+			self.Console.ePopen('update-rc.d -f crond remove')
 		else:
-			self.Console.ePopen('update-rc.d -f busybox-cron defaults')
+			self.Console.ePopen('update-rc.d -f crond defaults 90 60')
 		sleep(3)
 		self.updateList()
 
@@ -162,7 +162,7 @@ class CronTimers(Screen):
 		self['labdisabled'].hide()
 		self.my_crond_active = False
 		self.my_crond_run = False
-		if path.exists('/etc/rc3.d/S20busybox-cron'):
+		if path.exists('/etc/rc3.d/S90crond'):
 			self['labdisabled'].hide()
 			self['labactive'].show()
 			self.my_crond_active = True
@@ -306,7 +306,7 @@ class CronTimersConfig(Screen, ConfigListScreen):
 		if config.crontimers.runwhen.value == 'Weekly':
 			self.list.append(getConfigListEntry(_("What Day of week ?"), config.crontimers.dayofweek))
 		if config.crontimers.runwhen.value == 'Monthly':
-			self.list.append(getConfigListEntry(_("What date of month ?"), config.crontimers.dayofmonth))
+			self.list.append(getConfigListEntry(_("What Day of month ?"), config.crontimers.dayofmonth))
 		self.list.append(getConfigListEntry(_("Command type"), config.crontimers.commandtype))
 		if config.crontimers.commandtype.value == 'custom':
 			self.list.append(getConfigListEntry(_("Command To Run"), config.crontimers.user_command))
@@ -341,7 +341,7 @@ class CronTimersConfig(Screen, ConfigListScreen):
 	def checkentry(self):
 		msg = ''
 		if (config.crontimers.commandtype.value == 'predefined' and config.crontimers.predefined_command.value == '') or config.crontimers.commandtype.value == 'custom' and config.crontimers.user_command.value == '':
-			msg = 'You must set at least one Command'
+			msg = _("You must set at least one Command")
 		if msg:
 			self.session.open(MessageBox, msg, MessageBox.TYPE_ERROR)
 		else:
