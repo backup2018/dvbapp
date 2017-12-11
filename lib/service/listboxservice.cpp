@@ -79,9 +79,9 @@ void eListboxServiceContent::setRoot(const eServiceReference &root, bool justSet
 	ASSERT(m_service_center);
 
 	if (m_service_center->list(m_root, m_lst))
-		eDebug("no list available!");
+		eDebug("[eListboxServiceContent] no list available!");
 	else if (m_lst->getContent(m_list))
-		eDebug("getContent failed");
+		eDebug("[eListboxServiceContent] getContent failed");
 
 	FillFinished();
 }
@@ -116,13 +116,15 @@ void eListboxServiceContent::getCurrent(eServiceReference &ref)
 
 void eListboxServiceContent::getPrev(eServiceReference &ref)
 {
+	list::iterator cursor;
+
 	if (cursorValid())
 	{
-		list::iterator cursor(m_cursor);
+		cursor = m_cursor;
+
 		if (cursor == m_list.begin())
-		{
 			cursor = m_list.end();
-		}
+
 		ref = *(--cursor);
 	}
 	else
@@ -131,14 +133,17 @@ void eListboxServiceContent::getPrev(eServiceReference &ref)
 
 void eListboxServiceContent::getNext(eServiceReference &ref)
 {
+	list::iterator cursor;
+
 	if (cursorValid())
 	{
-		list::iterator cursor(m_cursor);
+		cursor = m_cursor;
+
 		cursor++;
+
 		if (cursor == m_list.end())
-		{
 			cursor = m_list.begin();
-		}
+
 		ref = *(cursor);
 	}
 	else
@@ -407,26 +412,26 @@ int eListboxServiceContent::setCurrentMarked(bool state)
 			{
 				ePtr<iMutableServiceList> list;
 				if (m_lst->startEdit(list))
-					eDebug("no editable list");
+					eDebug("[eListboxServiceContent] no editable list");
 				else
 				{
 					eServiceReference ref;
 					getCurrent(ref);
 					if(!ref)
-						eDebug("no valid service selected");
+						eDebug("[eListboxServiceContent] no valid service selected");
 					else
 					{
 						int pos = cursorGet();
-						eDebugNoNewLine("move %s to %d ", ref.toString().c_str(), pos);
+						eDebugNoNewLineStart("[eListboxServiceContent] move %s to %d ", ref.toString().c_str(), pos);
 						if (list->moveService(ref, cursorGet()))
-							eDebug("failed");
+							eDebugNoNewLine("failed\n");
 						else
-							eDebug("ok");
+							eDebugNoNewLine("ok\n");
 					}
 				}
 			}
 			else
-				eDebug("no list available!");
+				eDebug("[eListboxServiceContent] no list available!");
 		}
 	}
 

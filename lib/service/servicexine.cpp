@@ -19,7 +19,7 @@ static xine_t *xine; /* TODO: move this into a static class */
 eServiceFactoryXine::eServiceFactoryXine()
 {
 	ePtr<eServiceCenter> sc;
-	
+
 	eServiceCenter::getPrivInstance(sc);
 	if (sc)
 		sc->addServiceFactory(eServiceFactoryXine::id, this);
@@ -30,7 +30,7 @@ eServiceFactoryXine::eServiceFactoryXine()
 eServiceFactoryXine::~eServiceFactoryXine()
 {
 	ePtr<eServiceCenter> sc;
-	
+
 	eServiceCenter::getPrivInstance(sc);
 	if (sc)
 		sc->removeServiceFactory(eServiceFactoryXine::id);
@@ -104,17 +104,17 @@ eServiceXine::eServiceXine(const char *filename): m_filename(filename), m_pump(e
 	event_queue = 0;
 	ao_port = 0;
 	vo_port = 0;
-	
-	
+
+
 //	if ((vo_port = xine_open_video_driver(xine, "fb", XINE_VISUAL_TYPE_FB, NULL)) == NULL)
 	if ((vo_port = xine_open_video_driver(xine, "none", XINE_VISUAL_TYPE_NONE, NULL)) == NULL)
 	{
-		eWarning("cannot open xine video driver");
+		eWarning("[eServiceXine] cannot open xine video driver");
 	}
 
 	if ((ao_port = xine_open_audio_driver(xine , "alsa", NULL)) == NULL)
 	{
-		eWarning("cannot open xine audio driver");
+		eWarning("[eServiceXine] cannot open xine audio driver");
 	}
 	stream = xine_stream_new(xine, ao_port, vo_port);
 	event_queue = xine_event_new_queue(stream);
@@ -129,25 +129,25 @@ eServiceXine::~eServiceXine()
 	if (m_state == stRunning)
 		stop();
 
-	eDebug("close stream");
+	eDebug("[eServiceXine] close stream");
 	if (stream)
 		xine_close(stream);
-	eDebug("dispose queue");
+	eDebug("[eServiceXine] dispose queue");
 	if (event_queue)
 		xine_event_dispose_queue(event_queue);
-	eDebug("dispose stream");
+	eDebug("[eServiceXine] dispose stream");
 	if (stream)
 		xine_dispose(stream);
-	eDebug("dispose ao_port");
+	eDebug("[eServiceXine] dispose ao_port");
 	if (ao_port)
 		xine_close_audio_driver(xine, ao_port);
-	eDebug("dispose vo port");
+	eDebug("[eServiceXine] dispose vo port");
 	if (vo_port)
-		xine_close_video_driver(xine, vo_port);	
-	eDebug("done.");
+		xine_close_video_driver(xine, vo_port);
+	eDebug("[eServiceXine] done.");
 }
 
-DEFINE_REF(eServiceXine);	
+DEFINE_REF(eServiceXine);
 
 void eServiceXine::eventListenerWrap(void *user_data, const xine_event_t *event)
 {
@@ -157,8 +157,8 @@ void eServiceXine::eventListenerWrap(void *user_data, const xine_event_t *event)
 
 void eServiceXine::eventListener(const xine_event_t *event)
 {
-	eDebug("handle %d", event->type);
-	switch(event->type) { 
+	eDebug("[eServiceXine] handle %d", event->type);
+	switch(event->type) {
 	case XINE_EVENT_UI_PLAYBACK_FINISHED:
 		break;
 	}
@@ -177,21 +177,21 @@ RESULT eServiceXine::start()
 
 	ASSERT(m_state == stIdle);
 	ASSERT(stream);
-	
+
 	if (!xine_open(stream, m_filename.c_str()))
 	{
-		eWarning("xine_open failed!");
+		eWarning("[eServiceXine] xine_open failed!");
 		return -1;
 	}
-	
+
 	if (!xine_play(stream, 0, 0))
 	{
-		eWarning("xine_play failed!");
+		eWarning("[eServiceXine] xine_play failed!");
 		return -1;
 	}
 
 	m_state = stRunning;
-	
+
 	m_event(this, evStart);
 	return 0;
 }
@@ -227,7 +227,7 @@ RESULT eServiceXine::setFastForward(int ratio)
 {
 	return -1;
 }
-  
+
 		// iPausableService
 RESULT eServiceXine::pause()
 {
@@ -255,19 +255,19 @@ RESULT eServiceXine::getLength(pts_t &pts)
 	if (m_state == stError)
 		return 1;
 	ASSERT(stream);
-	
+
 	int pos_stream, pos_time, length_time;
-	
+
 	if (!xine_get_pos_length(stream, &pos_stream, &pos_time, &length_time))
 	{
-		eDebug("xine_get_pos_length failed!");
+		eDebug("[eServiceXine] xine_get_pos_length failed!");
 		return 1;
 	}
-	
-	eDebug("length: %d ms", length_time);
-	
+
+	eDebug("[eServiceXine] length: %d ms", length_time);
+
 	pts = length_time * 90;
-	
+
 	return 0;
 }
 
@@ -289,15 +289,15 @@ RESULT eServiceXine::getPlayPosition(pts_t &pts)
 	if (m_state == stError)
 		return 1;
 	ASSERT(stream);
-	
+
 	int pos_stream, pos_time, length_time;
-	
+
 	if (!xine_get_pos_length(stream, &pos_stream, &pos_time, &length_time))
 		return 1;
-	
-	eDebug("pos_time: %d", pos_time);
+
+	eDebug("[eServiceXine] pos_time: %d", pos_time);
 	pts = pos_time * 90;
-	
+
 		// GET POSITION
 	return 0;
 }
@@ -358,20 +358,20 @@ public:
 		{
 			int major, minor, sub;
 			xine_get_version (&major, &minor, &sub);
-			eWarning("Require xine library version 1.1.0, found %d.%d.%d.\n",
+			eWarning("[eServiceXine] Require xine library version 1.1.0, found %d.%d.%d.\n",
 						major, minor,sub);
 			return;
 		} else {
 			int major, minor, sub;
-			eDebug("Built with xine library %d.%d.%d (%s)\n",
+			eDebug("[eServiceXine] Built with xine library %d.%d.%d (%s)\n",
 						 XINE_MAJOR_VERSION, XINE_MINOR_VERSION, XINE_SUB_VERSION, XINE_VERSION);
-		
+
 			xine_get_version (&major, &minor, &sub);
 
-			eDebug("Found xine library version: %d.%d.%d (%s).\n", 
+			eDebug("[eServiceXine] Found xine library version: %d.%d.%d (%s).\n",
 						 major, minor, sub, xine_get_version_string());
 		}
-	
+
 		xine = xine_new();
 		xine_engine_set_param(xine, XINE_ENGINE_PARAM_VERBOSITY, 1);
 		xine_init(xine);

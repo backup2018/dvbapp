@@ -11,7 +11,7 @@
 #include <lib/service/servicedvb.h>
 
 class eDVBServiceRecord: public eDVBServiceBase,
-	public iRecordableService, 
+	public iRecordableService,
 	public iStreamableService,
 	public iSubserviceList,
 	public sigc::trackable
@@ -45,14 +45,14 @@ private:
 	bool m_is_pvr;
 	friend class eServiceFactoryDVB;
 	eDVBServiceRecord(const eServiceReferenceDVB &ref, bool isstreamclient = false);
-	
+
 	eDVBServiceEITHandler m_event_handler;
-	
+
 	eServiceReferenceDVB m_ref;
-	
+
 	ePtr<iDVBTSRecorder> m_record;
 	ePtr<eConnection> m_con_record_event;
-	
+
 	int m_recording, m_tuned, m_error;
 	std::set<int> m_pids_active;
 	std::string m_filename;
@@ -61,14 +61,14 @@ private:
 	int m_target_fd;
 	int m_streaming;
 	int m_last_event_id;
-	
+
 	int doPrepare();
 	int doRecord();
 
 			/* events */
 	void serviceEvent(int event);
 	sigc::signal2<void,iRecordableService*,int> m_event;
-	
+
 			/* recorder events */
 	void recordEvent(int event);
 

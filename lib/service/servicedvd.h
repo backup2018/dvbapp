@@ -120,7 +120,7 @@ public:
 	void setCutList(SWIG_PYOBJECT(ePyObject));
 	void setCutListEnable(int enable);
 
-			// iAudioTrackSelection	
+			// iAudioTrackSelection
 	int getNumberOfTracks();
 	RESULT selectTrack(unsigned int i);
 	RESULT getTrackInfo(struct iAudioTrackInfo &, unsigned int n);

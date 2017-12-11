@@ -86,7 +86,7 @@ static const std::string getConfigString(const std::string &key, const std::stri
 			std::string line;
 			std::getline(in, line);
 			size_t size = key.size();
-			if (!line.compare(0, size, key) && line[size] == '=') {
+			if (!key.compare(0, size, line) && line[size] == '=') {
 				value = line.substr(size + 1);
 				break;
 			}
@@ -158,9 +158,14 @@ void bsodFatal(const char *component)
 	std::string crashlog_name;
 	std::ostringstream os;
 	std::ostringstream os_text;
+	time_t t = time(0);
+	struct tm tm;
+	char tm_str[32];
+	localtime_r(&t, &tm);
+	strftime(tm_str, sizeof(tm_str), "%Y-%m-%d_%H-%M-%S", &tm);
 	os << getConfigString("config.crash.debug_path", "/home/root/logs/");
 	os << "enigma2_crash_";
-	os << time(0);
+	os << tm_str;
 	os << ".log";
 	crashlog_name = os.str();
 	f = fopen(crashlog_name.c_str(), "wb");
@@ -278,7 +283,7 @@ void bsodFatal(const char *component)
 
 	ePtr<gMainDC> my_dc;
 	gMainDC::getInstance(my_dc);
-	
+
 	gPainter p(my_dc);
 	p.resetOffset();
 	p.resetClip(eRect(ePoint(0, 0), my_dc->size()));
@@ -295,12 +300,13 @@ void bsodFatal(const char *component)
 	os.str("");
 	os.clear();
 	os_text.clear();
+
 	os_text << "We are really sorry. Your receiver encountered "
 		"a software problem, and needs to be restarted.\n"
 		"Please send the logfile " << crashlog_name << " to " << crash_emailaddr << ".\n"
 		"Your STB restarts in 10 seconds!\n"
 		"Component: " << crash_component;
-
+	
 	os << getConfigString("config.crash.debug_text", os_text.str());
 
 	p.renderText(usable_area, os.str().c_str(), gPainter::RT_WRAP|gPainter::RT_HALIGN_LEFT);
@@ -323,7 +329,7 @@ void bsodFatal(const char *component)
 	font = new gFont("Regular", hd ? 21 : 14);
 	p.setFont(font);
 
-	p.renderText(usable_area, 
+	p.renderText(usable_area,
 		lines.substr(start), gPainter::RT_HALIGN_LEFT);
 	sleep(10);
 
@@ -386,7 +392,7 @@ void handleFatalSignal(int signum, siginfo_t *si, void *ctx)
 	oops(uc->uc_mcontext);
 #endif
 	print_backtrace();
-	eDebug("-------FATAL SIGNAL");
+	eDebug("-------FATAL SIGNAL (%d)", signum);
 	bsodFatal("enigma2, signal");
 }
 
