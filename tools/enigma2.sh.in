@@ -42,6 +42,12 @@ if [ -d /usr/lib/enigma2/python/Plugins/Extensions/WebInterface/ ]; then
 fi
 
 if [ -x @bindir@/showiframe ]; then
+	if [ -e /proc/stb/info/boxtype ]; then
+		stbcheck=`cat /proc/stb/info/boxtype`
+		if [ ! $stbcheck == "u5" ]; then
+			killall -9 showiframe; sleep 1
+		fi
+	fi
 	if [ -f @sysconfdir@/enigma2/backdrop.mvi ]; then
 		@bindir@/showiframe @sysconfdir@/enigma2/backdrop.mvi
 	elif [ -f @sysconfdir@/enigma2/bootlogo.mvi ]; then

@@ -69,6 +69,8 @@ def getAboutText():
 		cpuMHz = "   (1,5 GHz)"
 	elif getMachineBuild() in ('formuler1tc','formuler1', 'triplex'):
 		cpuMHz = "   (1,3 GHz)"
+	elif getMachineBuild() in ('u5'):
+		cpuMHz = "   (1,6 GHz)"
 	elif getMachineBuild() in ('vuuno4k','dm900', 'gb7252', 'dags7252'):
 		cpuMHz = "   (1,7 GHz)"
 	elif getMachineBuild() in ('et1x000','hd52','hd51','sf4008','vs1500','h7'):

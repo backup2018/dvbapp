@@ -480,6 +480,10 @@ if test x"$with_amlogic" = xyes ; then
 	ALSA_CFLAGS="-lasound"
 fi
 
+if test "$BOXTYPE" == "u5"; then
+	AC_DEFINE(HAVE_HISILICON, 1,[define add HISILICON chip])
+fi
+
 if test "$BOXTYPE" == "wetekplay" -o "$BOXTYPE" == "wetekplay2" -o "$BOXTYPE" == "wetekhub"; then
 	AC_DEFINE(KEY_F7_TO_KEY_MENU, 1,[define when rc sends a KEY_F7 event for its KEY_MENU])
 	AC_DEFINE(KEY_F1_TO_KEY_MEDIA, 1,[define when rc sends a KEY_F1 event for its KEY_MEDIA])
