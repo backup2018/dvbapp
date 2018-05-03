@@ -313,7 +313,7 @@ eDVBVideo::eDVBVideo(eDVBDemux *demux, int dev)
 #ifdef DREAMBOX
 #define VIDEO_STREAMTYPE_H265_HEVC 22
 #else
-#define VIDEO_STREAMTYPE_H265_HEVC 22
+#define VIDEO_STREAMTYPE_H265_HEVC 7
 #endif
 #define VIDEO_STREAMTYPE_AVS 16
 
